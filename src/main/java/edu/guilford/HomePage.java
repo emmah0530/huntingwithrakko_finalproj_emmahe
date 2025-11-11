@@ -1,5 +1,7 @@
 package edu.guilford;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,45 +31,80 @@ public class HomePage extends JPanel {
     private JButton gambleButton;
     private int gambleNumber;
 
-    // public int cake;
 
     public HomePage() {
         setPreferredSize(new Dimension(1000, 600));
+
+        // Clicker Aspect
+        JPanel clickerPanel = new JPanel();
+        clickerPanel.setLayout(new BorderLayout());
+        
+        clickerPanel.setPreferredSize(new Dimension(200,50));
+        clickerPanel.setBackground(Color.cyan);
+        clickerPanel.setLayout(new BorderLayout());
+
+        add(clickerPanel, BorderLayout.CENTER);
+        
         cakeLabel = new JLabel("Cake: " + cake);
-        add(cakeLabel);
+        //add(cakeLabel);
         cakeClicker = new JButton("Click Here For Cake!");
-        add(cakeClicker);
+        //add(cakeClicker);
         ClickerListener clickListener = new ClickerListener();
         cakeClicker.addActionListener(clickListener);
+        clickerPanel.add(cakeLabel, BorderLayout.PAGE_START);
+        clickerPanel.add(cakeClicker, BorderLayout.CENTER);
+        
+        // Attack aspect
+        JPanel atkPanel = new JPanel();
+        add(atkPanel);
+        atkPanel.setPreferredSize(new Dimension(240,50));
+        atkPanel.setBackground(Color.green);
+        atkPanel.setLayout(new BorderLayout());
 
         atkLabel = new JLabel("Attack: " + atk);
-        add(atkLabel);
+        atkPanel.add(atkLabel, BorderLayout.PAGE_START);
         atkButtonIncrease = new JButton("Increase Attack");
-        add(atkButtonIncrease);
+        atkPanel.add(atkButtonIncrease, BorderLayout.LINE_START);
         AttackIncreaseListener atkIListener = new AttackIncreaseListener();
         atkButtonIncrease.addActionListener(atkIListener);
 
         atkButtonDecrease = new JButton("Decrease Attack");
-        add(atkButtonDecrease);
+        atkPanel.add(atkButtonDecrease, BorderLayout.LINE_END);
         AttackDecreaseListener atkDListener = new AttackDecreaseListener();
         atkButtonDecrease.addActionListener(atkDListener);
 
+        // Health aspect
+        JPanel healthPanel = new JPanel();
+        add(healthPanel);
+        healthPanel.setLayout(new BorderLayout());
+        healthPanel.setPreferredSize(new Dimension(250,50));
+        healthPanel.setBackground(Color.red);
+
         healthLabel = new JLabel("Health: " + health);
-        add(healthLabel);
+        healthPanel.add(healthLabel, BorderLayout.PAGE_START);
+
         healthButtonIncrease = new JButton("Increase Health");
-        add(healthButtonIncrease);
+        healthPanel.add(healthButtonIncrease, BorderLayout.LINE_START);
         HealthIncreaseListener healthIListener = new HealthIncreaseListener();
         healthButtonIncrease.addActionListener(healthIListener);
 
         healthButtonDecrease = new JButton("Decrease Health");
-        add(healthButtonDecrease);
+        healthPanel.add(healthButtonDecrease, BorderLayout.LINE_END);
         HealthDecreaseListener healthDListener = new HealthDecreaseListener();
         healthButtonDecrease.addActionListener(healthDListener);
 
+
+        // Gambling aspect
+        JPanel gamblePanel = new JPanel();
+        add(gamblePanel);
+        gamblePanel.setPreferredSize(new Dimension(300,100));
+        gamblePanel.setLayout(new BorderLayout());
+        gamblePanel.setBackground(Color.pink);
+
         gambleLabel = new JLabel("Press the button to gamble!");
-        add(gambleLabel);
+        gamblePanel.add(gambleLabel, BorderLayout.PAGE_START);
         gambleButton = new JButton("Gamble!");
-        add(gambleButton);
+        gamblePanel.add(gambleButton, BorderLayout.PAGE_END);
         GambleListener gambleListener = new GambleListener();
         gambleButton.addActionListener(gambleListener);
 
