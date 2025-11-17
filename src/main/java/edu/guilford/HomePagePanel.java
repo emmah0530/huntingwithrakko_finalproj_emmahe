@@ -115,7 +115,7 @@ public class HomePagePanel extends JPanel {
 
         gambleLabel = new JLabel("Press the button to gamble!");
         gamblePanel.add(gambleLabel, BorderLayout.PAGE_START);
-        gambleButton = new JButton("Gamble!");
+        gambleButton = new JButton("Gamble! (costs 50 cakes)");
         gamblePanel.add(gambleButton, BorderLayout.PAGE_END);
         GambleListener gambleListener = new GambleListener();
         gambleButton.addActionListener(gambleListener);

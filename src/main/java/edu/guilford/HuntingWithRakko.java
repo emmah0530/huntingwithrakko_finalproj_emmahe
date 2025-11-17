@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 public class HuntingWithRakko {
     public static void main(String[] args) {
-        JFrame homePageWindow = new JFrame("Home");
+        JFrame homePageWindow = new JFrame("Hunting With Rakko");
         homePageWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel primary = new JPanel();
         homePageWindow.getContentPane().add(primary);
