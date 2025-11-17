@@ -7,11 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
-public class HomePage extends JPanel {
+public class HomePagePanel extends JPanel {
     public int cake;
     public int atk;
     public int health;
@@ -31,9 +34,18 @@ public class HomePage extends JPanel {
     private JButton gambleButton;
     private int gambleNumber;
 
+    private JRadioButton boss1;
+    private JRadioButton boss2;
+    private JRadioButton boss3;
+    private ButtonGroup bossButtonGroup;
 
-    public HomePage() {
+    private JLabel rakko1;
+    private ImageIcon rakko1Icon;
+
+
+    public HomePagePanel() {
         setPreferredSize(new Dimension(1000, 600));
+        setLayout(new BorderLayout());
 
         // Clicker Aspect
         JPanel clickerPanel = new JPanel();
@@ -43,7 +55,7 @@ public class HomePage extends JPanel {
         clickerPanel.setBackground(Color.cyan);
         clickerPanel.setLayout(new BorderLayout());
 
-        add(clickerPanel, BorderLayout.CENTER);
+        add(clickerPanel, BorderLayout.PAGE_START);
         
         cakeLabel = new JLabel("Cake: " + cake);
         //add(cakeLabel);
@@ -56,7 +68,7 @@ public class HomePage extends JPanel {
         
         // Attack aspect
         JPanel atkPanel = new JPanel();
-        add(atkPanel);
+        add(atkPanel, BorderLayout.LINE_START);
         atkPanel.setPreferredSize(new Dimension(240,50));
         atkPanel.setBackground(Color.green);
         atkPanel.setLayout(new BorderLayout());
@@ -75,7 +87,7 @@ public class HomePage extends JPanel {
 
         // Health aspect
         JPanel healthPanel = new JPanel();
-        add(healthPanel);
+        add(healthPanel, BorderLayout.LINE_END);
         healthPanel.setLayout(new BorderLayout());
         healthPanel.setPreferredSize(new Dimension(250,50));
         healthPanel.setBackground(Color.red);
@@ -96,7 +108,7 @@ public class HomePage extends JPanel {
 
         // Gambling aspect
         JPanel gamblePanel = new JPanel();
-        add(gamblePanel);
+        add(gamblePanel, BorderLayout.PAGE_END);
         gamblePanel.setPreferredSize(new Dimension(300,100));
         gamblePanel.setLayout(new BorderLayout());
         gamblePanel.setBackground(Color.pink);
@@ -108,7 +120,20 @@ public class HomePage extends JPanel {
         GambleListener gambleListener = new GambleListener();
         gambleButton.addActionListener(gambleListener);
 
+        // Character displayed on the screen
+        JPanel rakkoPanel = new JPanel();
+        add(rakkoPanel, BorderLayout.CENTER);
+        // rakkoPanel.setLayout(new BorderLayout());
+        rakko1 = new JLabel("");
+        rakkoPanel.add(rakko1);
+        rakko1Icon = new ImageIcon(getClass().getResource("/rakko-chiikawa.gif"));
+        rakko1.setIcon(rakko1Icon);
+        
+        
+
     }
+
+
 
     private void updateDisplay() {
         cakeLabel.setText("Cake: " + cake);
@@ -203,7 +228,7 @@ public class HomePage extends JPanel {
                     gambleLabel.setText("You didn't win any cakes. Play again?");
                 }
             } else {
-                gambleLabel.setText("You need at least 50 cake to gamble!");
+                gambleLabel.setText("You need at least 50 cakes to gamble!");
             }
         updateDisplay();
 

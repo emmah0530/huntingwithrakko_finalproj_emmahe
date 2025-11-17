@@ -11,7 +11,7 @@ public class HuntingWithRakko {
         homePageWindow.getContentPane().add(primary);
 
 
-        HomePage homePage = new HomePage();
+        HomePagePanel homePage = new HomePagePanel();
         primary.add(homePage);
 
 
