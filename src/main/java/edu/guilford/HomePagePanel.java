@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 public class HomePagePanel extends JPanel {
-    public int cake;
-    public int atk;
-    public int health;
+    public static int cake;
+    public static int atk;
+    public static int health;
 
     private JLabel cakeLabel;
     private JButton cakeClicker;
@@ -38,14 +38,97 @@ public class HomePagePanel extends JPanel {
     private JRadioButton boss2;
     private JRadioButton boss3;
     private ButtonGroup bossButtonGroup;
+    
 
     private JLabel rakko1;
     private ImageIcon rakko1Icon;
 
+    private JButton fightButton;
+    private HomePageFrame hpFrame;
+    private FightPageFrame fpFrame;
+    private FightPagePanel fpPanel;
+    
+
+    public int getCake() {
+        return cake;
+    }
+
+
+
+    public void setCake(int cake) {
+        this.cake = cake;
+    }
+
+
+
+    public int getAtk() {
+        return atk;
+    }
+
+
+
+    public void setAtk(int atk) {
+        this.atk = atk;
+    }
+
+
+
+    public int getHealth() {
+        return health;
+    }
+
+
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    
+
+
+
+    public HomePageFrame getHpFrame() {
+        return hpFrame;
+    }
+
+
+
+    public void setHpFrame(HomePageFrame hpFrame) {
+        this.hpFrame = hpFrame;
+    }
+
+
+
+    public FightPageFrame getFpFrame() {
+        return fpFrame;
+    }
+
+
+
+    public void setFpFrame(FightPageFrame fpFrame) {
+        this.fpFrame = fpFrame;
+    }
+
+
+
+    public FightPagePanel getFpPanel() {
+        return fpPanel;
+    }
+
+
+
+    public void setFpPanel(FightPagePanel fpPanel) {
+        this.fpPanel = fpPanel;
+    }
+
+
 
     public HomePagePanel() {
         setPreferredSize(new Dimension(1000, 600));
+        Color backgroundColor = Color.decode("#FCF9FB");
+        setBackground(backgroundColor);
         setLayout(new BorderLayout());
+        
 
         // Clicker Aspect
         JPanel clickerPanel = new JPanel();
@@ -65,10 +148,17 @@ public class HomePagePanel extends JPanel {
         cakeClicker.addActionListener(clickListener);
         clickerPanel.add(cakeLabel, BorderLayout.PAGE_START);
         clickerPanel.add(cakeClicker, BorderLayout.CENTER);
+
+        // Stats aspect
+        JPanel statsPanel = new JPanel();
+        add(statsPanel, BorderLayout.LINE_START);
+        statsPanel.setBackground(backgroundColor);
+        statsPanel.setPreferredSize(new Dimension(240,100));
+        statsPanel.setLayout(new BorderLayout());
         
         // Attack aspect
         JPanel atkPanel = new JPanel();
-        add(atkPanel, BorderLayout.LINE_START);
+        statsPanel.add(atkPanel, BorderLayout.PAGE_START);
         atkPanel.setPreferredSize(new Dimension(240,50));
         atkPanel.setBackground(Color.green);
         atkPanel.setLayout(new BorderLayout());
@@ -87,7 +177,7 @@ public class HomePagePanel extends JPanel {
 
         // Health aspect
         JPanel healthPanel = new JPanel();
-        add(healthPanel, BorderLayout.LINE_END);
+        statsPanel.add(healthPanel, BorderLayout.PAGE_END);
         healthPanel.setLayout(new BorderLayout());
         healthPanel.setPreferredSize(new Dimension(250,50));
         healthPanel.setBackground(Color.red);
@@ -108,7 +198,7 @@ public class HomePagePanel extends JPanel {
 
         // Gambling aspect
         JPanel gamblePanel = new JPanel();
-        add(gamblePanel, BorderLayout.PAGE_END);
+        add(gamblePanel, BorderLayout.LINE_END);
         gamblePanel.setPreferredSize(new Dimension(300,100));
         gamblePanel.setLayout(new BorderLayout());
         gamblePanel.setBackground(Color.pink);
@@ -120,9 +210,40 @@ public class HomePagePanel extends JPanel {
         GambleListener gambleListener = new GambleListener();
         gambleButton.addActionListener(gambleListener);
 
+        // Boss radio buttons
+        JPanel bossPanel = new JPanel();
+        add(bossPanel, BorderLayout.PAGE_END);
+        bossPanel.setPreferredSize(new Dimension(300,50));
+        bossPanel.setBackground(Color.yellow);
+        
+        boss1 = new JRadioButton("Boss 1");
+        boss2 = new JRadioButton("Boss 2");
+        boss3 = new JRadioButton("Boss 3");
+        bossButtonGroup = new ButtonGroup();
+        bossButtonGroup.add(boss1);
+        bossButtonGroup.add(boss2);
+        bossButtonGroup.add(boss3);
+        bossPanel.add(boss1);
+        bossPanel.add(boss2);
+        bossPanel.add(boss3);
+        boss1.setSelected(true);
+        boss2.setEnabled(false);
+        boss3.setEnabled(false);
+        BossListener bossListener = new BossListener();
+        boss1.addActionListener(bossListener);
+        boss2.addActionListener(bossListener);
+        boss3.addActionListener(bossListener);
+
+        fightButton = new JButton("Fight!");
+        bossPanel.add(fightButton);
+        FightListener fightListener = new FightListener();
+        fightButton.addActionListener(fightListener);
+        
+
         // Character displayed on the screen
         JPanel rakkoPanel = new JPanel();
         add(rakkoPanel, BorderLayout.CENTER);
+        rakkoPanel.setBackground(backgroundColor);
         // rakkoPanel.setLayout(new BorderLayout());
         rakko1 = new JLabel("");
         rakkoPanel.add(rakko1);
@@ -236,4 +357,25 @@ public class HomePagePanel extends JPanel {
 
     }
 
+    public class BossListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JRadioButton chosenButton = (JRadioButton) e.getSource();
+            updateDisplay();
+        
+        }
+    }
+
+    public class FightListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            hpFrame.setHomePageVisibility(false);
+            fpFrame.setFightPageVisibility(true);
+            hpFrame.updateFrame();
+            fpFrame.updateFrame();
+        }
+        
+    }
 }
