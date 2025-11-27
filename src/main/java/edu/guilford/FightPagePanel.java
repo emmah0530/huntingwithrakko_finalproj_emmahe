@@ -24,6 +24,7 @@ public class FightPagePanel extends JPanel {
     private HomePagePanel hpPanel;
     private HomePageFrame hpFrame;
     private FightPageFrame fpFrame;
+    private PlayerStats playerStats;
 
     public HomePageFrame getHpFrame() {
         return hpFrame;
@@ -55,16 +56,14 @@ public class FightPagePanel extends JPanel {
 
     public void setHpPanel(HomePagePanel hpPanel) {
         this.hpPanel = hpPanel;
-        // If the home panel is provided after construction, update the displayed attack
-        // value (following code with try-catch block created by GPT-5 mini built into VS Code)
-        if (this.hpPanel != null && playerAtkLabel != null) {
-            try {
-                playerAtk = this.hpPanel.getAtk();
-                playerAtkLabel.setText("Your Attack: " + playerAtk);
-            } catch (Exception ex) {
-                // fallback: leave label as-is if anything goes wrong
-            }
-        }
+    }
+
+    public PlayerStats getPlayerStats() {
+        return playerStats;
+    }
+
+    public void setPlayerStats(PlayerStats playerStats) {
+        this.playerStats = playerStats;
     }
 
     public FightPagePanel() {
@@ -88,11 +87,14 @@ public class FightPagePanel extends JPanel {
             fightOrderLabel.setText("Boss's Turn!");
         }
 
-        playerAtkLabel = new JLabel("Your Attack: " + playerAtk);
+        // playerStats may not be provided yet (set via setter after construction).
+        // initialize with a safe default and update later in setPlayerStats(...)
+        //playerAtk = 0;
+        playerAtkLabel = new JLabel("Your Attack: " + 0);
         add(playerAtkLabel);
-        System.out.println("playerAtk = " + playerAtk);
+        
 
-        playerHealthLabel = new JLabel("Your Health: ");
+        playerHealthLabel = new JLabel("Your Health: " + 0);
         add(playerHealthLabel);
 
         boss1Health = 100;
@@ -104,12 +106,21 @@ public class FightPagePanel extends JPanel {
         HomeListener homeListener = new HomeListener();
         returnHome.addActionListener(homeListener);
 
-        updateDisplay();
-
     }
 
     public void updateDisplay() {
-        playerAtkLabel.setText("Your Attack: " + playerAtk);
+        playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
+        playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
+        Random rand = new Random();
+        fightOrder = rand.nextInt(1, 101);
+        if (fightOrder < 50) {
+            attackButton.setEnabled(true);
+            fightOrderLabel.setText("Your Turn!");
+        } else if (fightOrder > 50) {
+            attackButton.setEnabled(false);
+            fightOrderLabel.setText("Boss's Turn!");
+        }
+        
     }
 
     public class HomeListener implements ActionListener {

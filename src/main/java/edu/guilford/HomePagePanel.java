@@ -4,8 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 import javax.swing.ButtonGroup;
@@ -17,9 +21,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 public class HomePagePanel extends JPanel {
-    public static int cake;
-    public static int atk;
-    public static int health;
+    private int fontSize = 20;
+    private int fontPosture = Font.PLAIN;
+    private int fontWeight = Font.PLAIN;
+    private String fontFamily = "Helvectica";
+    private Font defaultFont = new Font(fontFamily, fontWeight | fontPosture, fontSize);
 
     private JLabel cakeLabel;
     private JButton cakeClicker;
@@ -51,29 +57,10 @@ public class HomePagePanel extends JPanel {
     private FightPageFrame fpFrame;
     private FightPagePanel fpPanel;
 
-    public int getCake() {
-        return cake;
-    }
+    private PlayerStats playerStats;
 
-    public void setCake(int cake) {
-        this.cake = cake;
-    }
+    
 
-    public int getAtk() {
-        return atk;
-    }
-
-    public void setAtk(int atk) {
-        this.atk = atk;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
 
     public HomePageFrame getHpFrame() {
         return hpFrame;
@@ -99,11 +86,20 @@ public class HomePagePanel extends JPanel {
         this.fpPanel = fpPanel;
     }
 
+    public PlayerStats getPlayerStats() {
+        return playerStats;
+    }
+
+    public void setPlayerStats(PlayerStats playerStats) {
+        this.playerStats = playerStats;
+    }
+
     public HomePagePanel() {
         setPreferredSize(new Dimension(1000, 600));
         Color backgroundColor = Color.decode("#FCF9FB");
         setBackground(backgroundColor);
         setLayout(new BorderLayout());
+        
 
         // Clicker Aspect
         JPanel clickerPanel = new JPanel();
@@ -115,10 +111,8 @@ public class HomePagePanel extends JPanel {
 
         add(clickerPanel, BorderLayout.PAGE_START);
 
-        cakeLabel = new JLabel("Cake: " + cake);
-        // add(cakeLabel);
+        cakeLabel = new JLabel("Cake: " + 0);
         cakeClicker = new JButton("Click Here For Cake!");
-        // add(cakeClicker);
         ClickerListener clickListener = new ClickerListener();
         cakeClicker.addActionListener(clickListener);
         clickerPanel.add(cakeLabel, BorderLayout.PAGE_START);
@@ -143,7 +137,7 @@ public class HomePagePanel extends JPanel {
         atkPanel.setBackground(Color.green);
         atkPanel.setLayout(new BorderLayout());
 
-        atkLabel = new JLabel("Attack: " + atk);
+        atkLabel = new JLabel("Attack: " + 0);
         atkPanel.add(atkLabel, BorderLayout.PAGE_START);
         atkButtonIncrease = new JButton("Increase Attack");
         atkPanel.add(atkButtonIncrease, BorderLayout.LINE_START);
@@ -162,7 +156,7 @@ public class HomePagePanel extends JPanel {
         healthPanel.setPreferredSize(new Dimension(250, 50));
         healthPanel.setBackground(Color.red);
 
-        healthLabel = new JLabel("Health: " + health);
+        healthLabel = new JLabel("Health: " + 0);
         healthPanel.add(healthLabel, BorderLayout.PAGE_START);
 
         healthButtonIncrease = new JButton("Increase Health");
@@ -231,16 +225,17 @@ public class HomePagePanel extends JPanel {
     }
 
     private void updateDisplay() {
-        cakeLabel.setText("Cake: " + cake);
-        atkLabel.setText("Attack: " + atk);
-        healthLabel.setText("Health: " + health);
+        cakeLabel.setText("Cake: " + playerStats.getCake());
+        atkLabel.setText("Attack: " + playerStats.getAtk());
+        healthLabel.setText("Health: " + playerStats.getHealth());
     }
 
     public class ClickerListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            cake += 1;
+            int cake = playerStats.getCake();
+            playerStats.setCake(cake += 1);
             updateDisplay();
         }
 
@@ -250,11 +245,14 @@ public class HomePagePanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            int cake = playerStats.getCake();
+            int atk = playerStats.getAtk();
             if (cake > 0) {
-                atk++;
-                cake--;
+                playerStats.setAtk(atk += 1);
+                playerStats.setCake(cake -=1);
+                updateDisplay();
             }
-            updateDisplay();
+            
         }
 
     }
@@ -263,9 +261,11 @@ public class HomePagePanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            int atk = playerStats.getAtk();
+            int cake = playerStats.getCake();
             if (atk > 0) {
-                atk--;
-                cake++;
+                playerStats.setAtk(atk -= 1);
+                playerStats.setCake(cake += 1);
             }
             updateDisplay();
         }
@@ -276,9 +276,11 @@ public class HomePagePanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            int health = playerStats.getHealth();
+            int cake = playerStats.getCake();
             if (cake > 0) {
-                health++;
-                cake--;
+                playerStats.setHealth(health += 1);
+                playerStats.setCake(cake -= 1);
             }
             updateDisplay();
         }
@@ -289,9 +291,11 @@ public class HomePagePanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            int health = playerStats.getHealth();
+            int cake = playerStats.getCake();
             if (health > 0) {
-                health--;
-                cake++;
+                playerStats.setHealth(health -= 1);
+                playerStats.setCake(cake += 1);
             }
             updateDisplay();
         }
@@ -314,6 +318,7 @@ public class HomePagePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             Random rand = new Random();
             gambleNumber = rand.nextInt(1, 101);
+            int cake = playerStats.getCake();
             if (cake >= 50) {
                 cake = cake - 50;
                 if (gambleNumber <= 5) {
@@ -355,6 +360,7 @@ public class HomePagePanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            fpPanel.updateDisplay();
             hpFrame.setHomePageVisibility(false);
             fpFrame.setFightPageVisibility(true);
             hpFrame.updateFrame();
