@@ -2,14 +2,13 @@ package edu.guilford;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 import javax.swing.ButtonGroup;
@@ -21,11 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 public class HomePagePanel extends JPanel {
-    private int fontSize = 20;
-    private int fontPosture = Font.PLAIN;
-    private int fontWeight = Font.PLAIN;
-    private String fontFamily = "Helvectica";
-    private Font defaultFont = new Font(fontFamily, fontWeight | fontPosture, fontSize);
 
     private JLabel cakeLabel;
     private JButton cakeClicker;
@@ -58,6 +52,8 @@ public class HomePagePanel extends JPanel {
     private FightPagePanel fpPanel;
 
     private PlayerStats playerStats;
+    // Optional custom font loaded from resources (chirufont.ttf)
+    private Font chiruFont;
 
     
 
@@ -99,6 +95,22 @@ public class HomePagePanel extends JPanel {
         Color backgroundColor = Color.decode("#FCF9FB");
         setBackground(backgroundColor);
         setLayout(new BorderLayout());
+
+        // The following try catch block was created by the ChatGPT embedded in VS Code by modifying what I had
+        // Attempt to load the bundled TTF font from resources. Use an absolute path (root of classpath)
+        // and guard against a null InputStream so Font.createFont doesn't throw an IOException.
+        try {
+            InputStream is = HomePagePanel.class.getResourceAsStream("/chirufont.ttf");
+            Font loaded = Font.createFont(Font.TRUETYPE_FONT, is);
+            // Register the font so it can be used by name elsewhere, and keep a derived instance for convenience.
+            java.awt.GraphicsEnvironment ge = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(loaded);
+            // Keep a default-sized version available for UI labels
+            this.chiruFont = loaded.deriveFont(Font.BOLD,17f);
+        } catch (FontFormatException | IOException e) {
+            // If the font can't be read for any reason, print a message and continue using system fonts.
+            System.err.println("Warning: couldn't load chirufont.ttf - " + e.getMessage());
+        }
         
 
         // Clicker Aspect
@@ -112,6 +124,7 @@ public class HomePagePanel extends JPanel {
         add(clickerPanel, BorderLayout.PAGE_START);
 
         cakeLabel = new JLabel("Cake: " + 0);
+        cakeLabel.setFont(this.chiruFont);
         cakeClicker = new JButton("Click Here For Cake!");
         ClickerListener clickListener = new ClickerListener();
         cakeClicker.addActionListener(clickListener);
@@ -138,6 +151,7 @@ public class HomePagePanel extends JPanel {
         atkPanel.setLayout(new BorderLayout());
 
         atkLabel = new JLabel("Attack: " + 0);
+        atkLabel.setFont(this.chiruFont);
         atkPanel.add(atkLabel, BorderLayout.PAGE_START);
         atkButtonIncrease = new JButton("Increase Attack");
         atkPanel.add(atkButtonIncrease, BorderLayout.LINE_START);
@@ -157,6 +171,7 @@ public class HomePagePanel extends JPanel {
         healthPanel.setBackground(Color.red);
 
         healthLabel = new JLabel("Health: " + 0);
+        healthLabel.setFont(this.chiruFont);
         healthPanel.add(healthLabel, BorderLayout.PAGE_START);
 
         healthButtonIncrease = new JButton("Increase Health");
@@ -177,6 +192,7 @@ public class HomePagePanel extends JPanel {
         gamblePanel.setBackground(Color.pink);
 
         gambleLabel = new JLabel("Press the button to gamble!");
+        gambleLabel.setFont(this.chiruFont);
         gamblePanel.add(gambleLabel, BorderLayout.PAGE_START);
         gambleButton = new JButton("Gamble! (costs 50 cakes)");
         gamblePanel.add(gambleButton, BorderLayout.PAGE_END);
