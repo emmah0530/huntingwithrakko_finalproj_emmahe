@@ -49,7 +49,7 @@ public class HomePagePanel extends JPanel {
     private JButton fightButton;
     private HomePageFrame hpFrame;
     private FightPageFrame fpFrame;
-    private FightPagePanel fpPanel;
+    private Boss1Panel fpPanel;
 
     private PlayerStats playerStats;
     // Optional custom font loaded from resources (chirufont.ttf)
@@ -74,11 +74,11 @@ public class HomePagePanel extends JPanel {
         this.fpFrame = fpFrame;
     }
 
-    public FightPagePanel getFpPanel() {
+    public Boss1Panel getFpPanel() {
         return fpPanel;
     }
 
-    public void setFpPanel(FightPagePanel fpPanel) {
+    public void setFpPanel(Boss1Panel fpPanel) {
         this.fpPanel = fpPanel;
     }
 
@@ -240,7 +240,7 @@ public class HomePagePanel extends JPanel {
 
     }
 
-    private void updateDisplay() {
+    public void updateDisplay() {
         cakeLabel.setText("Cake: " + playerStats.getCake());
         atkLabel.setText("Attack: " + playerStats.getAtk());
         healthLabel.setText("Health: " + playerStats.getHealth());
@@ -376,7 +376,7 @@ public class HomePagePanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            fpPanel.updateDisplay();
+            fpPanel.refreshDisplay();
             hpFrame.setHomePageVisibility(false);
             fpFrame.setFightPageVisibility(true);
             hpFrame.updateFrame();

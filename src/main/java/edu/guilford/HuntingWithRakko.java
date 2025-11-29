@@ -13,7 +13,7 @@ public class HuntingWithRakko {
         FightPageFrame fightPageWindow = new FightPageFrame("Fight the Boss!");
         fightPageWindow.setDefaultCloseOperation(FightPageFrame.EXIT_ON_CLOSE);
 
-        FightPagePanel fightPage = new FightPagePanel();
+        Boss1Panel fightPage = new Boss1Panel();
         fightPageWindow.add(fightPage);
 
         fightPageWindow.pack();
