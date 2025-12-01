@@ -83,17 +83,17 @@ public class Boss1Panel extends JPanel {
 
         attackButton = new JButton("Attack");
         add(attackButton);
+        AttackListener atkListener = new AttackListener();
+        attackButton.addActionListener(atkListener);
 
         fightOrderLabel = new JLabel();
         add(fightOrderLabel);
 
-
         // playerStats may not be provided yet (set via setter after construction).
         // initialize with a safe default and update later in setPlayerStats(...)
-        //playerAtk = 0;
+        // playerAtk = 0;
         playerAtkLabel = new JLabel("Your Attack: " + 0);
         add(playerAtkLabel);
-        
 
         playerHealthLabel = new JLabel("Your Health: " + 0);
         add(playerHealthLabel);
@@ -121,7 +121,6 @@ public class Boss1Panel extends JPanel {
         boss1 = new ImageIcon(getClass().getResource("/boss1.png"));
         boss1Label.setIcon(boss1);
 
-
     }
 
     public void refreshDisplay() {
@@ -129,6 +128,11 @@ public class Boss1Panel extends JPanel {
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
         Random rand = new Random();
         fightOrder = rand.nextInt(1, 101);
+        fightOrderDecision();
+        
+    }
+
+    public void fightOrderDecision() {
         if (fightOrder < 50) {
             attackButton.setEnabled(true);
             fightOrderLabel.setText("Your Turn!");
@@ -143,24 +147,44 @@ public class Boss1Panel extends JPanel {
             int playerHealth = playerStats.getHealth();
             playerStats.setHealth(playerHealth - boss1Atk);
             updateDisplay();
+            fightOrder = 1;
+            fightOrderDecision();
         }
-        
     }
-
     public void updateDisplay() {
         playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
+        boss1HealthLabel.setText("Boss Health: " + boss1Health);
+    }
+
+    public void returnHome() {
+        hpFrame.setHomePageVisibility(true);
+        fpFrame.setFightPageVisibility(false);
+        hpFrame.updateFrame();
+        fpFrame.updateFrame();
+        hpPanel.updateDisplay();
+    }
+
+    public class AttackListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boss1Health -= playerStats.getAtk();
+            updateDisplay();
+            fightOrder = 51;
+            fightOrderDecision();
+            if (boss1Health <= 0) {
+                returnHome();
+            }
+        }
+
     }
 
     public class HomeListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            hpFrame.setHomePageVisibility(true);
-            fpFrame.setFightPageVisibility(false);
-            hpFrame.updateFrame();
-            fpFrame.updateFrame();
-            hpPanel.updateDisplay();
+            returnHome();
         }
 
     }

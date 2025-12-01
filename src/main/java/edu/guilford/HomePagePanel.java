@@ -338,19 +338,18 @@ public class HomePagePanel extends JPanel {
             if (cake >= 50) {
                 cake = cake - 50;
                 if (gambleNumber <= 5) {
-                    cake += 200;
+                    playerStats.setCake(cake += 200);
                     gambleLabel.setText("You win 200 cakes! Play again?");
                 } else if (gambleNumber <= 15) {
-                    cake += 100;
+                    playerStats.setCake(cake += 100);
                     gambleLabel.setText("You win 100 cakes! Play again?");
                 } else if (gambleNumber <= 40) {
-                    cake += 75;
+                    playerStats.setCake(cake += 75);
                     gambleLabel.setText("You win 75 cakes! Play again?");
                 } else if (gambleNumber <= 65) {
-                    cake += 25;
+                    playerStats.setCake(cake += 25);
                     gambleLabel.setText("You win 25 cakes! Play again?");
                 } else {
-                    cake += 0;
                     gambleLabel.setText("You didn't win any cakes. Play again?");
                 }
             } else {

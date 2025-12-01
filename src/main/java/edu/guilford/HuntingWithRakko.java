@@ -13,22 +13,22 @@ public class HuntingWithRakko {
         FightPageFrame fightPageWindow = new FightPageFrame("Fight the Boss!");
         fightPageWindow.setDefaultCloseOperation(FightPageFrame.EXIT_ON_CLOSE);
 
-        Boss1Panel fightPage = new Boss1Panel();
-        fightPageWindow.add(fightPage);
+        Boss1Panel boss1Page = new Boss1Panel();
+        fightPageWindow.add(boss1Page);
 
         fightPageWindow.pack();
 
         PlayerStats playerStats = new PlayerStats();
 
-        homePage.setFpPanel(fightPage);
+        homePage.setFpPanel(boss1Page);
         homePage.setFpFrame(fightPageWindow);
         homePage.setHpFrame(homePageWindow);
         homePage.setPlayerStats(playerStats);        
         
-        fightPage.setHpPanel(homePage);
-        fightPage.setHpFrame(homePageWindow);
-        fightPage.setFpFrame(fightPageWindow);
-        fightPage.setPlayerStats(playerStats);
+        boss1Page.setHpPanel(homePage);
+        boss1Page.setHpFrame(homePageWindow);
+        boss1Page.setFpFrame(fightPageWindow);
+        boss1Page.setPlayerStats(playerStats);
         
     }
 }
