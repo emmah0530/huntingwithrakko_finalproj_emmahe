@@ -1,9 +1,14 @@
 package edu.guilford;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -35,6 +40,8 @@ public class Boss1Panel extends JPanel {
     private ImageIcon boss1;
 
     private boolean boss1Status;
+
+    private Font chiruFont;
 
     public HomePageFrame getHpFrame() {
         return hpFrame;
@@ -88,33 +95,66 @@ public class Boss1Panel extends JPanel {
         setPreferredSize(new Dimension(1000, 600));
         Color backgroundColor = Color.decode("#FCF9FB");
         setBackground(backgroundColor);
+        setLayout(new BorderLayout());
+
+        try {
+            InputStream is = HomePagePanel.class.getResourceAsStream("/chirufont.ttf");
+            Font loaded = Font.createFont(Font.TRUETYPE_FONT, is);
+            // Register the font so it can be used by name elsewhere, and keep a derived
+            // instance for convenience.
+            java.awt.GraphicsEnvironment ge = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(loaded);
+            // Keep a default-sized version available for UI labels
+            this.chiruFont = loaded.deriveFont(Font.BOLD, 17f);
+        } catch (FontFormatException | IOException e) {
+            // If the font can't be read for any reason, print a message and continue using
+            // system fonts.
+            System.err.println("Warning: couldn't load chirufont.ttf - " + e.getMessage());
+        }
 
         boss1Atk = 1;
         boss1Health = 10;
         boss1Status = false;
 
         attackButton = new JButton("Attack");
+        attackButton.setFont(this.chiruFont);
         add(attackButton);
         AttackListener atkListener = new AttackListener();
         attackButton.addActionListener(atkListener);
 
-        fightOrderLabel = new JLabel();
-        add(fightOrderLabel);
-
-        playerAtkLabel = new JLabel("Your Attack: " + 0);
-        add(playerAtkLabel);
-
-        playerHealthLabel = new JLabel("Your Health: " + 0);
-        add(playerHealthLabel);
-
+        JPanel topPanel = new JPanel();
+        add(topPanel, BorderLayout.PAGE_START);
         
-        boss1HealthLabel = new JLabel("Boss Health: " + boss1Health);
-        add(boss1HealthLabel);
+
+        fightOrderLabel = new JLabel();
+        fightOrderLabel.setFont(this.chiruFont);
+        topPanel.add(fightOrderLabel);
 
         returnHome = new JButton("Return Home");
-        add(returnHome);
+        returnHome.setFont(this.chiruFont);
+        topPanel.add(returnHome);
         HomeListener homeListener = new HomeListener();
         returnHome.addActionListener(homeListener);
+
+        JPanel playerStatsPanel = new JPanel();
+        add(playerStatsPanel, BorderLayout.LINE_START);
+        //playerStatsPanel.setLayout(new BorderLayout());
+        playerAtkLabel = new JLabel("Your Attack: " + 0);
+        playerAtkLabel.setFont(this.chiruFont);
+        playerStatsPanel.add(playerAtkLabel);
+
+        playerHealthLabel = new JLabel("Your Health: " + 0);
+        playerHealthLabel.setFont(this.chiruFont);
+        playerStatsPanel.add(playerHealthLabel);
+
+        
+        JPanel bossStatsPanel = new JPanel();
+        add(bossStatsPanel, BorderLayout.LINE_END);
+        boss1HealthLabel = new JLabel("Boss Health: " + boss1Health);
+        boss1HealthLabel.setFont(this.chiruFont);
+        bossStatsPanel.add(boss1HealthLabel);
+
+        
 
         fightRakko1Label = new JLabel("");
         add(fightRakko1Label);
@@ -132,6 +172,12 @@ public class Boss1Panel extends JPanel {
 
     }
 
+    public void checkPlayerHealth() {
+        if (playerStats.getHealth() <= 0) {
+            returnHome();
+        }
+    }
+
     public void refreshDisplay() {
         playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
@@ -139,8 +185,7 @@ public class Boss1Panel extends JPanel {
         fightOrder = rand.nextInt(1, 101);
         checkPlayerHealth();
         fightOrderDecision();
-        
-        
+
     }
 
     public void fightOrderDecision() {
@@ -150,7 +195,7 @@ public class Boss1Panel extends JPanel {
             fightRakko1Label.setVisible(false);
             fightRakko2Label.setVisible(true);
             updateDisplay();
-            //checkPlayerHealth();
+            // checkPlayerHealth();
         } else if (fightOrder > 50) {
             attackButton.setEnabled(false);
             fightOrderLabel.setText("Boss's Turn!");
@@ -159,17 +204,12 @@ public class Boss1Panel extends JPanel {
             int playerHealth = playerStats.getHealth();
             playerStats.setHealth(playerHealth - boss1Atk);
             updateDisplay();
-            //checkPlayerHealth();
+            // checkPlayerHealth();
             fightOrder = 1;
             fightOrderDecision();
         }
     }
 
-    public void checkPlayerHealth() {
-        if (playerStats.getHealth() <= 0) {
-                returnHome();
-            }
-    }
     public void updateDisplay() {
         playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
@@ -196,7 +236,7 @@ public class Boss1Panel extends JPanel {
             if (boss1Health <= 0) {
                 boss1Status = true;
                 returnHome();
-                
+
             }
         }
 

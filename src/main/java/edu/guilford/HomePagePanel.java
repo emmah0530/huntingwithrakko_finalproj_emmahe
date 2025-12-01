@@ -2,6 +2,7 @@ package edu.guilford;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -43,7 +44,7 @@ public class HomePagePanel extends JPanel {
 
     private JButton statsInfo;
 
-    //private JLabel gambleLabel;
+    // private JLabel gambleLabel;
     private JTextArea gambleText;
     private JButton gambleButton;
     private int gambleNumber;
@@ -139,6 +140,7 @@ public class HomePagePanel extends JPanel {
         cakeLabel = new JLabel("Cake: " + 0);
         cakeLabel.setFont(this.chiruFont);
         cakeClicker = new JButton("Click Here For Cake!");
+        cakeClicker.setFont(this.chiruFont);
         ClickerListener clickListener = new ClickerListener();
         cakeClicker.addActionListener(clickListener);
         clickerPanel.add(cakeLabel, BorderLayout.PAGE_START);
@@ -170,11 +172,13 @@ public class HomePagePanel extends JPanel {
         atkButtonPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
         atkButtonIncrease = new JButton("Increase Attack");
+        atkButtonIncrease.setFont(this.chiruFont);
         atkButtonPanel.add(atkButtonIncrease);
         AttackIncreaseListener atkIListener = new AttackIncreaseListener();
         atkButtonIncrease.addActionListener(atkIListener);
 
         atkButtonDecrease = new JButton("Decrease Attack");
+        atkButtonDecrease.setFont(this.chiruFont);
         atkButtonPanel.add(atkButtonDecrease);
         AttackDecreaseListener atkDListener = new AttackDecreaseListener();
         atkButtonDecrease.addActionListener(atkDListener);
@@ -198,16 +202,19 @@ public class HomePagePanel extends JPanel {
         healthButtonPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
         healthButtonIncrease = new JButton("Increase Health");
+        healthButtonIncrease.setFont(this.chiruFont);
         healthButtonPanel.add(healthButtonIncrease);
         HealthIncreaseListener healthIListener = new HealthIncreaseListener();
         healthButtonIncrease.addActionListener(healthIListener);
 
         healthButtonDecrease = new JButton("Decrease Health");
+        healthButtonDecrease.setFont(this.chiruFont);
         healthButtonPanel.add(healthButtonDecrease);
         HealthDecreaseListener healthDListener = new HealthDecreaseListener();
         healthButtonDecrease.addActionListener(healthDListener);
 
         statsInfo = new JButton("?");
+        statsInfo.setFont(this.chiruFont);
         // statsPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         statsPanel.add(statsInfo);
         StatsInfoListener statsInfoListener = new StatsInfoListener();
@@ -217,22 +224,23 @@ public class HomePagePanel extends JPanel {
         JPanel gamblePanel = new JPanel();
         add(gamblePanel, BorderLayout.LINE_END);
         gamblePanel.setPreferredSize(new Dimension(300, 100));
-        gamblePanel.setLayout(new BorderLayout());
+        gamblePanel.setLayout(new BoxLayout(gamblePanel, BoxLayout.PAGE_AXIS));
         gamblePanel.setBackground(Color.pink);
 
-        //gambleLabel = new JLabel("Press the button to gamble!");
-        //gambleLabel.setFont(this.chiruFont);
-        //gamblePanel.add(gambleLabel, BorderLayout.PAGE_START);
-
+        // gambleLabel = new JLabel("Press the button to gamble!");
+        // gambleLabel.setFont(this.chiruFont);
+        // gamblePanel.add(gambleLabel, BorderLayout.PAGE_START);
+        gamblePanel.add(Box.createRigidArea(new Dimension(0, 5)));
         gambleText = new JTextArea("Press the button to gamble!");
         gambleText.setFont(this.chiruFont);
         gambleText.setLineWrap(true);
         gambleText.setWrapStyleWord(true);
         gambleText.setOpaque(false);
+        gamblePanel.add(gambleText);
 
-        gamblePanel.add(gambleText, BorderLayout.PAGE_START);
-        gambleButton = new JButton("Gamble! (costs 50 cakes)");
-        gamblePanel.add(gambleButton, BorderLayout.PAGE_END);
+        gambleButton = new JButton("Gamble!(costs 50 cakes)");
+        gambleButton.setFont(this.chiruFont);
+        gamblePanel.add(gambleButton, Component.CENTER_ALIGNMENT);
         GambleListener gambleListener = new GambleListener();
         gambleButton.addActionListener(gambleListener);
 
@@ -243,8 +251,11 @@ public class HomePagePanel extends JPanel {
         bossPanel.setBackground(Color.yellow);
 
         boss1 = new JRadioButton("Boss 1");
+        boss1.setFont(this.chiruFont);
         boss2 = new JRadioButton("Boss 2");
+        boss2.setFont(this.chiruFont);
         boss3 = new JRadioButton("Boss 3");
+        boss3.setFont(this.chiruFont);
         bossButtonGroup = new ButtonGroup();
         bossButtonGroup.add(boss1);
         bossButtonGroup.add(boss2);
@@ -266,6 +277,7 @@ public class HomePagePanel extends JPanel {
         bossInfo.addActionListener(bossInfoListener);
 
         fightButton = new JButton("Fight!");
+        fightButton.setFont(this.chiruFont);
         bossPanel.add(fightButton);
         FightListener fightListener = new FightListener();
         fightButton.addActionListener(fightListener);
@@ -319,11 +331,11 @@ public class HomePagePanel extends JPanel {
         int cake = playerStats.getCake();
         if (boss1Panel.isBoss1Status()) {
             boss2.setEnabled(true);
-            JOptionPane.showMessageDialog(null, "You beat the first boss!",
-                    "Boss 1 Complete!",
-                    JOptionPane.PLAIN_MESSAGE);
             playerStats.setCake(cake += 50);
             updateDisplay();
+            JOptionPane.showMessageDialog(null, "You beat the first boss and earned 50 more cakes!",
+                    "Boss 1 Complete!",
+                    JOptionPane.PLAIN_MESSAGE);
         }
     }
 
@@ -469,12 +481,20 @@ public class HomePagePanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            boss1Panel.refreshDisplay();
-            boss1Panel.checkPlayerHealth();
-            hpFrame.setHomePageVisibility(false);
-            fpFrame.setFightPageVisibility(true);
-            hpFrame.updateFrame();
-            fpFrame.updateFrame();
+            if (playerStats.getHealth() <= 0) {
+                JOptionPane.showMessageDialog(null,
+                        "You need at least 1 Health to Fight!",
+                        "Health Too Low",
+                        JOptionPane.PLAIN_MESSAGE);
+            } else {
+                boss1Panel.checkPlayerHealth();
+                boss1Panel.refreshDisplay();
+                hpFrame.setHomePageVisibility(false);
+                fpFrame.setFightPageVisibility(true);
+                hpFrame.updateFrame();
+                fpFrame.updateFrame();
+            }
+
         }
 
     }
