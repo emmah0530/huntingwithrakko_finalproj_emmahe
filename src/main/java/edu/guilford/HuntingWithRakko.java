@@ -20,7 +20,7 @@ public class HuntingWithRakko {
 
         PlayerStats playerStats = new PlayerStats();
 
-        homePage.setFpPanel(boss1Page);
+        homePage.setBoss1Panel(boss1Page);
         homePage.setFpFrame(fightPageWindow);
         homePage.setHpFrame(homePageWindow);
         homePage.setPlayerStats(playerStats);        
