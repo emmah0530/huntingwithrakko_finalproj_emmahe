@@ -9,7 +9,7 @@ import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.TextArea;
+//import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 
-import javax.swing.BorderFactory;
+//import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -50,8 +50,11 @@ public class HomePagePanel extends JPanel {
     private int gambleNumber;
 
     private JRadioButton boss1;
+    private boolean fightBoss1;
     private JRadioButton boss2;
+    private boolean fightBoss2;
     private JRadioButton boss3;
+    private boolean fightBoss3;
     private ButtonGroup bossButtonGroup;
 
     private JButton bossInfo;
@@ -61,8 +64,12 @@ public class HomePagePanel extends JPanel {
 
     private JButton fightButton;
     private HomePageFrame hpFrame;
-    private FightPageFrame fpFrame;
+    private Boss1Frame boss1Frame;
     private Boss1Panel boss1Panel;
+    private Boss2Frame boss2Frame;
+    private Boss2Panel boss2Panel;
+    private Boss3Frame boss3Frame;
+    private Boss3Panel boss3Panel;
 
     private PlayerStats playerStats;
 
@@ -76,12 +83,20 @@ public class HomePagePanel extends JPanel {
         this.hpFrame = hpFrame;
     }
 
-    public FightPageFrame getFpFrame() {
-        return fpFrame;
+    public Boss1Frame getBoss1Frame() {
+        return boss1Frame;
     }
 
-    public void setFpFrame(FightPageFrame fpFrame) {
-        this.fpFrame = fpFrame;
+    public void setBoss1Frame(Boss1Frame fpFrame) {
+        this.boss1Frame = fpFrame;
+    }
+
+    public Boss2Frame getBoss2Frame() {
+        return boss2Frame;
+    }
+
+    public void setBoss2Frame(Boss2Frame boss2Frame) {
+        this.boss2Frame = boss2Frame;
     }
 
     public Boss1Panel getBoss1Panel() {
@@ -90,6 +105,30 @@ public class HomePagePanel extends JPanel {
 
     public void setBoss1Panel(Boss1Panel boss1Panel) {
         this.boss1Panel = boss1Panel;
+    }
+
+    public Boss2Panel getBoss2Panel() {
+        return boss2Panel;
+    }
+
+    public void setBoss2Panel(Boss2Panel boss2Panel) {
+        this.boss2Panel = boss2Panel;
+    }
+
+    public Boss3Frame getBoss3Frame() {
+        return boss3Frame;
+    }
+
+    public void setBoss3Frame(Boss3Frame boss3Frame) {
+        this.boss3Frame = boss3Frame;
+    }
+
+    public Boss3Panel getBoss3Panel() {
+        return boss3Panel;
+    }
+
+    public void setBoss3Panel(Boss3Panel boss3Panel) {
+        this.boss3Panel = boss3Panel;
     }
 
     public PlayerStats getPlayerStats() {
@@ -105,6 +144,13 @@ public class HomePagePanel extends JPanel {
         Color backgroundColor = Color.decode("#FCF9FB");
         setBackground(backgroundColor);
         setLayout(new BorderLayout());
+
+        Color usagiBeige = Color.decode("#FEEEC8");
+        Color hachiBlue = Color.decode("#A1CBDC");
+        Color chiikawaPink = Color.decode("#EEC2C7");
+        Color grassGreen = Color.decode("#CFE6B0");
+        Color atkGreen = Color.decode("#70CE64");
+        Color healthRed = Color.decode("#F04265");
 
         // The following try catch block was created by the ChatGPT embedded in VS Code
         // by modifying what I had
@@ -132,7 +178,7 @@ public class HomePagePanel extends JPanel {
         clickerPanel.setLayout(new BorderLayout());
 
         clickerPanel.setPreferredSize(new Dimension(200, 50));
-        clickerPanel.setBackground(Color.cyan);
+        clickerPanel.setBackground(usagiBeige);
         clickerPanel.setLayout(new BorderLayout());
 
         add(clickerPanel, BorderLayout.PAGE_START);
@@ -149,46 +195,51 @@ public class HomePagePanel extends JPanel {
         // Stats aspect
         JPanel statsPanel = new JPanel();
         add(statsPanel, BorderLayout.LINE_START);
-        statsPanel.setBackground(backgroundColor);
+        statsPanel.setBackground(hachiBlue);
         statsPanel.setPreferredSize(new Dimension(240, 100));
         statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.PAGE_AXIS));
+        statsPanel.add(Box.createRigidArea(new Dimension(10, 50)));
 
         // Attack aspect
         JPanel atkPanel = new JPanel();
         statsPanel.add(atkPanel);
         atkPanel.setPreferredSize(new Dimension(240, 50));
-        atkPanel.setBackground(Color.green);
+        atkPanel.setBackground(atkGreen);
         atkPanel.setLayout(new BoxLayout(atkPanel, BoxLayout.PAGE_AXIS));
 
         atkLabel = new JLabel("Attack: " + 0);
         atkLabel.setFont(this.chiruFont);
-        atkPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        // atkPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         atkPanel.add(atkLabel);
 
+
+        atkPanel.add(Box.createRigidArea(new Dimension(10, 10)));
         JPanel atkButtonPanel = new JPanel();
         atkPanel.add(atkButtonPanel);
-        atkButtonPanel.setBackground(Color.green);
+        atkButtonPanel.setBackground(atkGreen);
         atkButtonPanel.setLayout(new BoxLayout(atkButtonPanel, BoxLayout.LINE_AXIS));
-        atkButtonPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        atkButtonPanel.add(Box.createRigidArea(new Dimension(20, 10)));
 
-        atkButtonIncrease = new JButton("Increase Attack");
+        atkButtonIncrease = new JButton("+1");
         atkButtonIncrease.setFont(this.chiruFont);
         atkButtonPanel.add(atkButtonIncrease);
         AttackIncreaseListener atkIListener = new AttackIncreaseListener();
         atkButtonIncrease.addActionListener(atkIListener);
 
-        atkButtonDecrease = new JButton("Decrease Attack");
+        atkButtonDecrease = new JButton("-1");
         atkButtonDecrease.setFont(this.chiruFont);
         atkButtonPanel.add(atkButtonDecrease);
         AttackDecreaseListener atkDListener = new AttackDecreaseListener();
         atkButtonDecrease.addActionListener(atkDListener);
+
+        atkPanel.add(Box.createRigidArea(new Dimension(5, 10)));
 
         // Health aspect
         JPanel healthPanel = new JPanel();
         statsPanel.add(healthPanel);
         healthPanel.setLayout(new BoxLayout(healthPanel, BoxLayout.PAGE_AXIS));
         healthPanel.setPreferredSize(new Dimension(250, 50));
-        healthPanel.setBackground(Color.red);
+        healthPanel.setBackground(healthRed);
 
         healthLabel = new JLabel("Health: " + 0);
         healthLabel.setFont(this.chiruFont);
@@ -201,13 +252,13 @@ public class HomePagePanel extends JPanel {
         healthButtonPanel.setLayout(new BoxLayout(healthButtonPanel, BoxLayout.LINE_AXIS));
         healthButtonPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        healthButtonIncrease = new JButton("Increase Health");
+        healthButtonIncrease = new JButton("+1");
         healthButtonIncrease.setFont(this.chiruFont);
         healthButtonPanel.add(healthButtonIncrease);
         HealthIncreaseListener healthIListener = new HealthIncreaseListener();
         healthButtonIncrease.addActionListener(healthIListener);
 
-        healthButtonDecrease = new JButton("Decrease Health");
+        healthButtonDecrease = new JButton("-1");
         healthButtonDecrease.setFont(this.chiruFont);
         healthButtonPanel.add(healthButtonDecrease);
         HealthDecreaseListener healthDListener = new HealthDecreaseListener();
@@ -225,7 +276,7 @@ public class HomePagePanel extends JPanel {
         add(gamblePanel, BorderLayout.LINE_END);
         gamblePanel.setPreferredSize(new Dimension(300, 100));
         gamblePanel.setLayout(new BoxLayout(gamblePanel, BoxLayout.PAGE_AXIS));
-        gamblePanel.setBackground(Color.pink);
+        gamblePanel.setBackground(chiikawaPink);
 
         // gambleLabel = new JLabel("Press the button to gamble!");
         // gambleLabel.setFont(this.chiruFont);
@@ -238,17 +289,20 @@ public class HomePagePanel extends JPanel {
         gambleText.setOpaque(false);
         gamblePanel.add(gambleText);
 
+        //gamblePanel.add(Box.createRigidArea(new Dimension(10, 10)));
+
         gambleButton = new JButton("Gamble!(costs 50 cakes)");
         gambleButton.setFont(this.chiruFont);
         gamblePanel.add(gambleButton, Component.CENTER_ALIGNMENT);
         GambleListener gambleListener = new GambleListener();
         gambleButton.addActionListener(gambleListener);
+        gamblePanel.add(Box.createRigidArea(new Dimension(10, 10)));
 
         // Boss radio buttons
         JPanel bossPanel = new JPanel();
         add(bossPanel, BorderLayout.PAGE_END);
         bossPanel.setPreferredSize(new Dimension(300, 50));
-        bossPanel.setBackground(Color.yellow);
+        bossPanel.setBackground(grassGreen);
 
         boss1 = new JRadioButton("Boss 1");
         boss1.setFont(this.chiruFont);
@@ -264,8 +318,11 @@ public class HomePagePanel extends JPanel {
         bossPanel.add(boss2);
         bossPanel.add(boss3);
         boss1.setSelected(true);
+        fightBoss1 = true;
         boss2.setEnabled(false);
+        fightBoss2 = false;
         boss3.setEnabled(false);
+        fightBoss3 = false;
         BossListener bossListener = new BossListener();
         boss1.addActionListener(bossListener);
         boss2.addActionListener(bossListener);
@@ -325,6 +382,9 @@ public class HomePagePanel extends JPanel {
 
     public void refreshDisplay() {
         checkBossStatus();
+        if (playerStats.getHealth() < 0) {
+            playerStats.setHealth(0);
+        }
     }
 
     private void checkBossStatus() {
@@ -335,6 +395,12 @@ public class HomePagePanel extends JPanel {
             updateDisplay();
             JOptionPane.showMessageDialog(null, "You beat the first boss and earned 50 more cakes!",
                     "Boss 1 Complete!",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
+        if (boss1Panel.isBoss1Lost()) {
+            updateDisplay();
+            JOptionPane.showMessageDialog(null, "You lost against the first boss. Increase your stats and try again!",
+                    "Boss 1 Failed :(",
                     JOptionPane.PLAIN_MESSAGE);
         }
     }
@@ -415,8 +481,9 @@ public class HomePagePanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(null, "Spend cake to increase your attack and health!",
-                    "How to Increase Your Stats",
+            JOptionPane.showMessageDialog(null,
+                    "Spend 1 cake for a +1 increase in attack or health! \n Decrease your attack or health by 1 for +1 cake!",
+                    "How to Change Your Stats",
                     JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -430,7 +497,7 @@ public class HomePagePanel extends JPanel {
             gambleNumber = rand.nextInt(1, 101);
             int cake = playerStats.getCake();
             if (cake >= 50) {
-                cake = cake - 50;
+                playerStats.setCake(cake -= 50);
                 if (gambleNumber <= 5) {
                     playerStats.setCake(cake += 200);
                     gambleText.setText("You win 200 cakes! Play again?");
@@ -460,6 +527,19 @@ public class HomePagePanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             JRadioButton chosenButton = (JRadioButton) e.getSource();
+            if (chosenButton == boss1) {
+                fightBoss1 = true;
+                fightBoss2 = false;
+                fightBoss3 = false;
+            } else if (chosenButton == boss2) {
+                fightBoss2 = true;
+                fightBoss1 = false;
+                fightBoss3 = false;
+            } else if (chosenButton == boss3) {
+                fightBoss3 = true;
+                fightBoss1 = false;
+                fightBoss2 = false;
+            }
             updateDisplay();
 
         }
@@ -486,13 +566,25 @@ public class HomePagePanel extends JPanel {
                         "You need at least 1 Health to Fight!",
                         "Health Too Low",
                         JOptionPane.PLAIN_MESSAGE);
-            } else {
+            } else if (fightBoss1) {
                 boss1Panel.checkPlayerHealth();
                 boss1Panel.refreshDisplay();
                 hpFrame.setHomePageVisibility(false);
-                fpFrame.setFightPageVisibility(true);
+                boss1Frame.setBoss1Visibility(true);
                 hpFrame.updateFrame();
-                fpFrame.updateFrame();
+                boss1Frame.updateFrame();
+            } else if (fightBoss2) {
+                // boss2Panel.checkPlayerHealth();
+                // boss2Panel.refreshDisplay();
+                hpFrame.setHomePageVisibility(false);
+                boss2Frame.setBoss2Visibility(true);
+                hpFrame.updateFrame();
+                boss2Frame.updateFrame();
+            } else if (fightBoss3) {
+                hpFrame.setHomePageVisibility(false);
+                // boss3Frame.setBoss2Visibility(true);
+                hpFrame.updateFrame();
+                // boss3Frame.updateFrame();
             }
 
         }

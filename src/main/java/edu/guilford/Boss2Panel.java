@@ -26,7 +26,7 @@ public class Boss2Panel extends JPanel {
     private JButton returnHome; // temp button
     private HomePagePanel hpPanel;
     private HomePageFrame hpFrame;
-    private FightPageFrame fpFrame;
+    private Boss2Frame boss2Frame;
     private PlayerStats playerStats;
 
     private JLabel fightRakko1Label;
@@ -46,12 +46,12 @@ public class Boss2Panel extends JPanel {
         this.hpFrame = hpFrame;
     }
 
-    public FightPageFrame getFpFrame() {
-        return fpFrame;
+    public Boss2Frame getBoss2Frame() {
+        return boss2Frame;
     }
 
-    public void setFpFrame(FightPageFrame fpFrame) {
-        this.fpFrame = fpFrame;
+    public void setBoss2Frame(Boss2Frame fpFrame) {
+        this.boss2Frame = fpFrame;
     }
 
     public HomePagePanel getHpPanel() {
@@ -180,9 +180,9 @@ public class Boss2Panel extends JPanel {
 
     public void returnHome() {
         hpFrame.setHomePageVisibility(true);
-        fpFrame.setFightPageVisibility(false);
+        boss2Frame.setBoss2Visibility(false);
         hpFrame.updateFrame();
-        fpFrame.updateFrame();
+        boss2Frame.updateFrame();
         hpPanel.refreshDisplay();
         hpPanel.updateDisplay();
     }
