@@ -51,6 +51,7 @@ public class Boss1Panel extends JPanel {
     private Timer bossTimer;
 
     private Font chiruFont;
+    private Font chiruFont25;
 
     public HomePageFrame getHpFrame() {
         return hpFrame;
@@ -114,6 +115,8 @@ public class Boss1Panel extends JPanel {
         setBackground(backgroundColor);
         setLayout(new BorderLayout());
 
+        Color usagiBeige = Color.decode("#FEEEC8");
+
         try {
             InputStream is = HomePagePanel.class.getResourceAsStream("/chirufont.ttf");
             Font loaded = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -129,6 +132,8 @@ public class Boss1Panel extends JPanel {
             System.err.println("Warning: couldn't load chirufont.ttf - " + e.getMessage());
         }
 
+        chiruFont25 = this.chiruFont.deriveFont(Font.BOLD, 25);
+
         boss1Atk = 1;
         boss1Health = 10;
         boss1Status = false;
@@ -139,18 +144,24 @@ public class Boss1Panel extends JPanel {
         bossTimer = new Timer(delay, timerListener);
 
         attackButton = new JButton("Attack");
-        attackButton.setFont(this.chiruFont);
+        attackButton.setFont(chiruFont25);
+        attackButton.setPreferredSize(new Dimension(1000,50));
         add(attackButton, BorderLayout.PAGE_END);
         AttackListener atkListener = new AttackListener();
         attackButton.addActionListener(atkListener);
 
         JPanel topPanel = new JPanel();
-        topPanel.setBackground(Color.white);
+        topPanel.setBackground(usagiBeige);
+        topPanel.setPreferredSize(new Dimension(1000,50));
         add(topPanel, BorderLayout.PAGE_START);
 
+        topPanel.add(Box.createRigidArea(new Dimension(1000, 5))); 
+
         fightOrderLabel = new JLabel();
-        fightOrderLabel.setFont(this.chiruFont);
+        fightOrderLabel.setFont(chiruFont25);
         topPanel.add(fightOrderLabel);
+
+        topPanel.add(Box.createRigidArea(new Dimension(680, 0)));
 
         returnHome = new JButton("Return Home");
         returnHome.setFont(this.chiruFont);
@@ -161,28 +172,38 @@ public class Boss1Panel extends JPanel {
         JPanel playerStatsPanel = new JPanel();
         playerStatsPanel.setBackground(Color.white);
         add(playerStatsPanel, BorderLayout.LINE_END);
-        playerStatsPanel.setLayout(new BoxLayout(playerStatsPanel, BoxLayout.PAGE_AXIS));
-        playerStatsPanel.add(Box.createRigidArea(new Dimension(100, 100)));
-        playerAtkLabel = new JLabel("Your Attack: " + 0);
-        playerAtkLabel.setFont(this.chiruFont);
-        playerStatsPanel.add(playerAtkLabel);
+        playerStatsPanel.setLayout(new BoxLayout(playerStatsPanel, BoxLayout.LINE_AXIS));
+        //playerStatsPanel.add(Box.createRigidArea(new Dimension(100, 10)));
 
-        playerStatsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+        JPanel playerStatsSubPanel = new JPanel();
+        playerStatsSubPanel.setBackground(Color.white);
+        playerStatsSubPanel.setLayout(new BoxLayout(playerStatsSubPanel, BoxLayout.PAGE_AXIS));
+        playerStatsPanel.add(playerStatsSubPanel);
+
         playerHealthLabel = new JLabel("Your Health: " + 0);
-        playerHealthLabel.setFont(this.chiruFont);
-        playerStatsPanel.add(playerHealthLabel);
+        playerHealthLabel.setFont(chiruFont25);
+        playerStatsSubPanel.add(playerHealthLabel);
+
+        playerStatsSubPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+        playerAtkLabel = new JLabel("Your Attack: " + 0);
+        playerAtkLabel.setFont(chiruFont25);
+        playerStatsSubPanel.add(playerAtkLabel);
+        playerStatsPanel.add(Box.createRigidArea(new Dimension(20, 0)));
 
         JPanel bossStatsPanel = new JPanel();
         bossStatsPanel.setBackground(Color.white);
         add(bossStatsPanel, BorderLayout.LINE_START);
+        bossStatsPanel.add(Box.createRigidArea(new Dimension(10, 500)));
         boss1HealthLabel = new JLabel("Boss Health: " + boss1Health);
-        boss1HealthLabel.setFont(this.chiruFont);
+        boss1HealthLabel.setFont(chiruFont25);
         bossStatsPanel.add(boss1HealthLabel);
 
         JPanel characterPanel = new JPanel();
         characterPanel.setBackground(Color.white);
+        characterPanel.setLayout(new BoxLayout(characterPanel, BoxLayout.LINE_AXIS));
         add(characterPanel, BorderLayout.CENTER);
 
+        characterPanel.add(Box.createRigidArea(new Dimension(50, 0)));
         boss1Label = new JLabel("");
         characterPanel.add(boss1Label);
         boss1 = new ImageIcon(getClass().getResource("/boss1.png"));
@@ -208,6 +229,8 @@ public class Boss1Panel extends JPanel {
 
     public void refreshDisplay() {
         boss1Lost = false;
+        boss1Health = 10;
+        boss1Status = false;
         playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
         Random rand = new Random();
@@ -225,6 +248,7 @@ public class Boss1Panel extends JPanel {
             fightRakko2Label.setVisible(true);
             updateDisplay();
             checkPlayerHealth();
+            bossTimer.stop();
 
         } else if (fightOrder > 50) { // boss goes first
             attackButton.setEnabled(false);
@@ -254,10 +278,7 @@ public class Boss1Panel extends JPanel {
             // bossTimer.cancel();
             // }
 
-
             bossTimer.restart();
-
-            
 
         }
     }

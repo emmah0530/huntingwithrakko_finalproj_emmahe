@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+//import javax.swing.SwingConstants;
 
 public class HomePagePanel extends JPanel {
 
@@ -37,14 +38,16 @@ public class HomePagePanel extends JPanel {
     private JLabel atkLabel;
     private JButton atkButtonIncrease;
     private JButton atkButtonDecrease;
+    private JButton atkButtonIncrease10;
+    private JButton atkButtonDecrease10;
 
     private JLabel healthLabel;
     private JButton healthButtonIncrease;
     private JButton healthButtonDecrease;
+    private JButton healthButtonIncrease10;
+    private JButton healthButtonDecrease10;
 
     private JButton statsInfo;
-
-    // private JLabel gambleLabel;
     private JTextArea gambleText;
     private JButton gambleButton;
     private int gambleNumber;
@@ -74,6 +77,7 @@ public class HomePagePanel extends JPanel {
     private PlayerStats playerStats;
 
     private Font chiruFont;
+    private Font chiruFont25;
 
     public HomePageFrame getHpFrame() {
         return hpFrame;
@@ -153,7 +157,8 @@ public class HomePagePanel extends JPanel {
         Color healthRed = Color.decode("#F04265");
 
         // The following try catch block was created by the ChatGPT embedded in VS Code
-        // by modifying what I had
+        // by modifying what I had tried already, since I couldn't figure out how the font worked
+
         // Attempt to load the bundled TTF font from resources. Use an absolute path
         // (root of classpath)
         // and guard against a null InputStream so Font.createFont doesn't throw an
@@ -173,6 +178,8 @@ public class HomePagePanel extends JPanel {
             System.err.println("Warning: couldn't load chirufont.ttf - " + e.getMessage());
         }
 
+        chiruFont25 = this.chiruFont.deriveFont(Font.BOLD, 25);
+
         // Clicker Aspect
         JPanel clickerPanel = new JPanel();
         clickerPanel.setLayout(new BorderLayout());
@@ -184,7 +191,7 @@ public class HomePagePanel extends JPanel {
         add(clickerPanel, BorderLayout.PAGE_START);
 
         cakeLabel = new JLabel("Cake: " + 0);
-        cakeLabel.setFont(this.chiruFont);
+        cakeLabel.setFont(chiruFont25);
         cakeClicker = new JButton("Click Here For Cake!");
         cakeClicker.setFont(this.chiruFont);
         ClickerListener clickListener = new ClickerListener();
@@ -198,7 +205,7 @@ public class HomePagePanel extends JPanel {
         statsPanel.setBackground(hachiBlue);
         statsPanel.setPreferredSize(new Dimension(240, 100));
         statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.PAGE_AXIS));
-        statsPanel.add(Box.createRigidArea(new Dimension(10, 50)));
+        statsPanel.add(Box.createRigidArea(new Dimension(0, 120)));
 
         // Attack aspect
         JPanel atkPanel = new JPanel();
@@ -206,14 +213,13 @@ public class HomePagePanel extends JPanel {
         atkPanel.setPreferredSize(new Dimension(240, 50));
         atkPanel.setBackground(atkGreen);
         atkPanel.setLayout(new BoxLayout(atkPanel, BoxLayout.PAGE_AXIS));
+        atkPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
         atkLabel = new JLabel("Attack: " + 0);
-        atkLabel.setFont(this.chiruFont);
-        // atkPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        atkLabel.setFont(chiruFont25);
+        atkLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         atkPanel.add(atkLabel);
 
-
-        atkPanel.add(Box.createRigidArea(new Dimension(10, 10)));
         JPanel atkButtonPanel = new JPanel();
         atkPanel.add(atkButtonPanel);
         atkButtonPanel.setBackground(atkGreen);
@@ -232,6 +238,28 @@ public class HomePagePanel extends JPanel {
         AttackDecreaseListener atkDListener = new AttackDecreaseListener();
         atkButtonDecrease.addActionListener(atkDListener);
 
+        atkButtonPanel.add(Box.createRigidArea(new Dimension(20, 10)));
+
+        JPanel atkButtonPanel10 = new JPanel();
+        atkPanel.add(atkButtonPanel10);
+        atkButtonPanel10.setBackground(atkGreen);
+        atkButtonPanel10.setLayout(new BoxLayout(atkButtonPanel10, BoxLayout.LINE_AXIS));
+        atkButtonPanel10.add(Box.createRigidArea(new Dimension(20, 10)));
+
+        atkButtonIncrease10 = new JButton("+10");
+        atkButtonIncrease10.setFont(this.chiruFont);
+        atkButtonPanel10.add(atkButtonIncrease10);
+        AttackIncrease10Listener atkI10Listener = new AttackIncrease10Listener();
+        atkButtonIncrease10.addActionListener(atkI10Listener);
+
+        atkButtonDecrease10 = new JButton("-10");
+        atkButtonDecrease10.setFont(this.chiruFont);
+        atkButtonPanel10.add(atkButtonDecrease10);
+        AttackDecrease10Listener atkD10Listener = new AttackDecrease10Listener();
+        atkButtonDecrease10.addActionListener(atkD10Listener);
+
+        atkButtonPanel10.add(Box.createRigidArea(new Dimension(20, 10)));
+
         atkPanel.add(Box.createRigidArea(new Dimension(5, 10)));
 
         // Health aspect
@@ -242,15 +270,16 @@ public class HomePagePanel extends JPanel {
         healthPanel.setBackground(healthRed);
 
         healthLabel = new JLabel("Health: " + 0);
-        healthLabel.setFont(this.chiruFont);
+        healthLabel.setFont(chiruFont25);
+        healthLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         healthPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         healthPanel.add(healthLabel);
 
         JPanel healthButtonPanel = new JPanel();
         healthPanel.add(healthButtonPanel);
-        healthButtonPanel.setBackground(Color.red);
+        healthButtonPanel.setBackground(healthRed);
         healthButtonPanel.setLayout(new BoxLayout(healthButtonPanel, BoxLayout.LINE_AXIS));
-        healthButtonPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        healthButtonPanel.add(Box.createRigidArea(new Dimension(20, 10)));
 
         healthButtonIncrease = new JButton("+1");
         healthButtonIncrease.setFont(this.chiruFont);
@@ -264,9 +293,34 @@ public class HomePagePanel extends JPanel {
         HealthDecreaseListener healthDListener = new HealthDecreaseListener();
         healthButtonDecrease.addActionListener(healthDListener);
 
-        statsInfo = new JButton("?");
+        healthButtonPanel.add(Box.createRigidArea(new Dimension(20, 10)));
+
+        JPanel healthButtonPanel10 = new JPanel();
+        healthPanel.add(healthButtonPanel10);
+        healthButtonPanel10.setBackground(healthRed);
+        healthButtonPanel10.setLayout(new BoxLayout(healthButtonPanel10, BoxLayout.LINE_AXIS));
+        healthButtonPanel10.add(Box.createRigidArea(new Dimension(20, 10)));
+
+        healthButtonIncrease10 = new JButton("+10");
+        healthButtonIncrease10.setFont(this.chiruFont);
+        healthButtonPanel10.add(healthButtonIncrease10);
+        HealthIncrease10Listener healthI10Listener = new HealthIncrease10Listener();
+        healthButtonIncrease10.addActionListener(healthI10Listener);
+
+        healthButtonDecrease10 = new JButton("-10");
+        healthButtonDecrease10.setFont(this.chiruFont);
+        healthButtonPanel10.add(healthButtonDecrease10);
+        HealthDecrease10Listener healthD10Listener = new HealthDecrease10Listener();
+        healthButtonDecrease10.addActionListener(healthD10Listener);
+
+        healthButtonPanel10.add(Box.createRigidArea(new Dimension(20, 10)));
+
+        healthPanel.add(Box.createRigidArea(new Dimension(5, 10)));
+
+        statsInfo = new JButton("info");
         statsInfo.setFont(this.chiruFont);
-        // statsPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        statsInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        statsInfo.setMaximumSize(new Dimension(146,30));
         statsPanel.add(statsInfo);
         StatsInfoListener statsInfoListener = new StatsInfoListener();
         statsInfo.addActionListener(statsInfoListener);
@@ -278,9 +332,7 @@ public class HomePagePanel extends JPanel {
         gamblePanel.setLayout(new BoxLayout(gamblePanel, BoxLayout.PAGE_AXIS));
         gamblePanel.setBackground(chiikawaPink);
 
-        // gambleLabel = new JLabel("Press the button to gamble!");
-        // gambleLabel.setFont(this.chiruFont);
-        // gamblePanel.add(gambleLabel, BorderLayout.PAGE_START);
+
         gamblePanel.add(Box.createRigidArea(new Dimension(0, 5)));
         gambleText = new JTextArea("Press the button to gamble!");
         gambleText.setFont(this.chiruFont);
@@ -293,7 +345,8 @@ public class HomePagePanel extends JPanel {
 
         gambleButton = new JButton("Gamble!(costs 50 cakes)");
         gambleButton.setFont(this.chiruFont);
-        gamblePanel.add(gambleButton, Component.CENTER_ALIGNMENT);
+        gambleButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        gamblePanel.add(gambleButton);
         GambleListener gambleListener = new GambleListener();
         gambleButton.addActionListener(gambleListener);
         gamblePanel.add(Box.createRigidArea(new Dimension(10, 10)));
@@ -447,6 +500,37 @@ public class HomePagePanel extends JPanel {
 
     }
 
+    public class AttackIncrease10Listener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int cake = playerStats.getCake();
+            int atk = playerStats.getAtk();
+            if (cake >= 10) {
+                playerStats.setAtk(atk += 10);
+                playerStats.setCake(cake -= 10);
+                updateDisplay();
+            }
+
+        }
+
+    }
+
+    public class AttackDecrease10Listener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int atk = playerStats.getAtk();
+            int cake = playerStats.getCake();
+            if (atk >= 10) {
+                playerStats.setAtk(atk -= 10);
+                playerStats.setCake(cake += 10);
+            }
+            updateDisplay();
+        }
+
+    }
+
     public class HealthIncreaseListener implements ActionListener {
 
         @Override
@@ -477,6 +561,32 @@ public class HomePagePanel extends JPanel {
 
     }
 
+    public class HealthIncrease10Listener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int health = playerStats.getHealth();
+            int cake = playerStats.getCake();
+            if (cake >= 10) {
+                playerStats.setHealth(health += 10);
+                playerStats.setCake(cake -= 10);
+            }
+            updateDisplay();
+        }
+    }
+
+    public class HealthDecrease10Listener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int health = playerStats.getHealth();
+            int cake = playerStats.getCake();
+            if (health >= 10) {
+                playerStats.setHealth(health -= 10);
+                playerStats.setCake(cake += 10);
+            }
+            updateDisplay();
+        }
+    }
+
     public class StatsInfoListener implements ActionListener {
 
         @Override
@@ -498,16 +608,16 @@ public class HomePagePanel extends JPanel {
             int cake = playerStats.getCake();
             if (cake >= 50) {
                 playerStats.setCake(cake -= 50);
-                if (gambleNumber <= 5) {
+                if (gambleNumber <= 3) {
                     playerStats.setCake(cake += 200);
                     gambleText.setText("You win 200 cakes! Play again?");
-                } else if (gambleNumber <= 15) {
+                } else if (gambleNumber <= 13) {
                     playerStats.setCake(cake += 100);
                     gambleText.setText("You win 100 cakes! Play again?");
-                } else if (gambleNumber <= 40) {
+                } else if (gambleNumber <= 38) {
                     playerStats.setCake(cake += 75);
                     gambleText.setText("You win 75 cakes! Play again?");
-                } else if (gambleNumber <= 65) {
+                } else if (gambleNumber <= 63) {
                     playerStats.setCake(cake += 25);
                     gambleText.setText("You win 25 cakes! Play again?");
                 } else {
@@ -550,7 +660,7 @@ public class HomePagePanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(null,
-                    "Recommended (minimum): 10 Health for Boss 1, 30 Health for Boss 2, 50 Health for Boss 3",
+                    "Fight bosses to earn cake!\nRecommended (minimum): 10 Health for Boss 1, 30 Health for Boss 2, 50 Health for Boss 3",
                     "Tips for Fighting",
                     JOptionPane.INFORMATION_MESSAGE);
         }
@@ -569,6 +679,7 @@ public class HomePagePanel extends JPanel {
             } else if (fightBoss1) {
                 boss1Panel.checkPlayerHealth();
                 boss1Panel.refreshDisplay();
+                boss1Panel.updateDisplay();
                 hpFrame.setHomePageVisibility(false);
                 boss1Frame.setBoss1Visibility(true);
                 hpFrame.updateFrame();
