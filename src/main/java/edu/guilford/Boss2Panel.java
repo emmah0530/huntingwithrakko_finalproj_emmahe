@@ -151,9 +151,9 @@ public class Boss2Panel extends JPanel {
 
         chiruFont25 = this.chiruFont.deriveFont(Font.BOLD, 25);
 
-        boss2Atk = 1;
-        boss2Health = 2;
-        boss2Status = false;
+        boss2Atk = 50;
+        boss2Health = 500;
+        //boss2Status = false;
 
         int delay = 2000;
         TimerListener timerListener = new TimerListener();
@@ -218,7 +218,7 @@ public class Boss2Panel extends JPanel {
         characterPanel.setLayout(new BoxLayout(characterPanel, BoxLayout.LINE_AXIS));
         add(characterPanel, BorderLayout.CENTER);
 
-        characterPanel.add(Box.createRigidArea(new Dimension(50, 0)));
+        characterPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         boss2Label = new JLabel("");
         characterPanel.add(boss2Label);
         boss2 = new ImageIcon(getClass().getResource("/boss2.jpg"));
@@ -244,10 +244,12 @@ public class Boss2Panel extends JPanel {
 
     public void refreshDisplay() {
         boss2Lost = false;
-        boss2Health = 2;
+        boss2Health = 500;
         boss2Status = false;
         boss1Panel.setBoss1Status(false);
+        boss1Panel.setBoss1Lost(false);
         boss3Panel.setBoss3Status(false);
+        boss3Panel.setBoss3Lost(false);
         playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
         Random rand = new Random();

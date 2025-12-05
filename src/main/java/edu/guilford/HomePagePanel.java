@@ -9,7 +9,6 @@ import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-//import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -35,6 +34,8 @@ public class HomePagePanel extends JPanel {
     private JLabel cakeLabel;
     private JButton cakeClicker;
 
+    private JButton tutorialButton;
+
     private JLabel atkLabel;
     private JButton atkButtonIncrease;
     private JButton atkButtonDecrease;
@@ -48,6 +49,8 @@ public class HomePagePanel extends JPanel {
     private JButton healthButtonDecrease10;
 
     private JButton statsInfo;
+    private JLabel statDeficient;
+
     private JTextArea gambleText;
     private JButton gambleButton;
     private int gambleNumber;
@@ -77,6 +80,8 @@ public class HomePagePanel extends JPanel {
     private PlayerStats playerStats;
 
     private Font chiruFont;
+    private Font chiruFont15;
+    private Font chiruFont20;
     private Font chiruFont25;
 
     public HomePageFrame getHpFrame() {
@@ -157,7 +162,8 @@ public class HomePagePanel extends JPanel {
         Color healthRed = Color.decode("#F04265");
 
         // The following try catch block was created by the ChatGPT embedded in VS Code
-        // by modifying what I had tried already, since I couldn't figure out how the font worked
+        // by modifying what I had tried already, since I couldn't figure out how the
+        // font worked
 
         // Attempt to load the bundled TTF font from resources. Use an absolute path
         // (root of classpath)
@@ -178,8 +184,11 @@ public class HomePagePanel extends JPanel {
             System.err.println("Warning: couldn't load chirufont.ttf - " + e.getMessage());
         }
 
+        chiruFont15 = this.chiruFont.deriveFont(Font.BOLD, 15);
+        chiruFont20 = this.chiruFont.deriveFont(Font.BOLD, 20);
         chiruFont25 = this.chiruFont.deriveFont(Font.BOLD, 25);
 
+        
         // Clicker Aspect
         JPanel clickerPanel = new JPanel();
         clickerPanel.setLayout(new BorderLayout());
@@ -193,11 +202,18 @@ public class HomePagePanel extends JPanel {
         cakeLabel = new JLabel("Cake: " + 0);
         cakeLabel.setFont(chiruFont25);
         cakeClicker = new JButton("Click Here For Cake!");
-        cakeClicker.setFont(this.chiruFont);
+        cakeClicker.setFont(chiruFont20);
         ClickerListener clickListener = new ClickerListener();
         cakeClicker.addActionListener(clickListener);
         clickerPanel.add(cakeLabel, BorderLayout.PAGE_START);
         clickerPanel.add(cakeClicker, BorderLayout.CENTER);
+
+        tutorialButton = new JButton("How To Play");
+        tutorialButton.setFont(this.chiruFont);
+        TutorialListener tutorialListener = new TutorialListener();
+        tutorialButton.addActionListener(tutorialListener);
+        clickerPanel.add(tutorialButton, BorderLayout.LINE_END);
+
 
         // Stats aspect
         JPanel statsPanel = new JPanel();
@@ -320,10 +336,17 @@ public class HomePagePanel extends JPanel {
         statsInfo = new JButton("info");
         statsInfo.setFont(this.chiruFont);
         statsInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        statsInfo.setMaximumSize(new Dimension(146,30));
+        statsInfo.setMaximumSize(new Dimension(163, 30));
         statsPanel.add(statsInfo);
         StatsInfoListener statsInfoListener = new StatsInfoListener();
         statsInfo.addActionListener(statsInfoListener);
+
+        statsPanel.add(Box.createRigidArea(new Dimension(5, 10)));
+
+        statDeficient = new JLabel("");
+        statDeficient.setAlignmentX(Component.CENTER_ALIGNMENT);
+        statDeficient.setFont(chiruFont15);
+        statsPanel.add(statDeficient);
 
         // Gambling aspect
         JPanel gamblePanel = new JPanel();
@@ -332,16 +355,23 @@ public class HomePagePanel extends JPanel {
         gamblePanel.setLayout(new BoxLayout(gamblePanel, BoxLayout.PAGE_AXIS));
         gamblePanel.setBackground(chiikawaPink);
 
-
         gamblePanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        gambleText = new JTextArea("Press the button to gamble for a chance to win up to 200 cakes!");
+
+        JPanel gambleTextPanel = new JPanel();
+        gamblePanel.add(gambleTextPanel);
+        gambleTextPanel.setLayout(new BoxLayout(gambleTextPanel, BoxLayout.LINE_AXIS));
+        gambleTextPanel.setBackground(chiikawaPink);
+
+        gambleTextPanel.add(Box.createRigidArea(new Dimension(8, 0)));
+        gambleText = new JTextArea("Press the button to gamble for a chance to win up to 500 cakes!");
         gambleText.setFont(this.chiruFont);
         gambleText.setLineWrap(true);
         gambleText.setWrapStyleWord(true);
+        gambleText.setEditable(false);
+        gambleText.setFocusable(false);
         gambleText.setOpaque(false);
-        gamblePanel.add(gambleText);
-
-        //gamblePanel.add(Box.createRigidArea(new Dimension(10, 10)));
+        gambleTextPanel.add(gambleText);
+        gambleTextPanel.add(Box.createRigidArea(new Dimension(8, 0)));
 
         gambleButton = new JButton("Gamble!(costs 50 cakes)");
         gambleButton.setFont(this.chiruFont);
@@ -410,9 +440,11 @@ public class HomePagePanel extends JPanel {
         // ImageIcon(getClass().getResource("/rakko-chiikawa.gif")).getImage().getScaledInstance(200,
         // 50, Image.SCALE_SMOOTH)));
 
-        rakko1Icon = new ImageIcon(getClass().getResource("/rakko-chiikawa.gif"));
+        rakko1Icon = new ImageIcon(getClass().getResource("/rakko-chiikawa-1.gif"));
         rakko1.setIcon(rakko1Icon);
         rakkoPanel.add(rakko1);
+
+        
 
     }
 
@@ -431,6 +463,7 @@ public class HomePagePanel extends JPanel {
         cakeLabel.setText("Cake: " + playerStats.getCake());
         atkLabel.setText("Attack: " + playerStats.getAtk());
         healthLabel.setText("Health: " + playerStats.getHealth());
+        statDeficient.setText("");
     }
 
     public void refreshDisplay() {
@@ -458,9 +491,9 @@ public class HomePagePanel extends JPanel {
         }
         if (boss2Panel.isBoss2Status()) {
             boss3.setEnabled(true);
-            playerStats.setCake(cake += 100);
+            playerStats.setCake(cake += 125);
             updateDisplay();
-            JOptionPane.showMessageDialog(null, "You beat the second boss and earned 100 more cakes!",
+            JOptionPane.showMessageDialog(null, "You beat the second boss and earned 125 more cakes!",
                     "Boss 2 Complete!",
                     JOptionPane.PLAIN_MESSAGE);
         }
@@ -471,9 +504,9 @@ public class HomePagePanel extends JPanel {
                     JOptionPane.PLAIN_MESSAGE);
         }
         if (boss3Panel.isBoss3Status()) {
-            playerStats.setCake(cake += 150);
+            playerStats.setCake(cake += 300);
             updateDisplay();
-            JOptionPane.showMessageDialog(null, "You beat the third boss and earned 150 more cakes!",
+            JOptionPane.showMessageDialog(null, "You beat the third boss and earned 300 more cakes! Congratulations on beating the game!",
                     "Boss 3 Complete!",
                     JOptionPane.PLAIN_MESSAGE);
         }
@@ -496,6 +529,17 @@ public class HomePagePanel extends JPanel {
 
     }
 
+    public class TutorialListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(null, "Earn cakes through clicking, fighting bosses, and trying your luck through gambling!\nCakes can be used to upgrade Rakko's stats to fight harder bosses.\nBeat all three bosses to complete the game!",
+                    "How To Play",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+    }
+
     public class AttackIncreaseListener implements ActionListener {
 
         @Override
@@ -506,8 +550,9 @@ public class HomePagePanel extends JPanel {
                 playerStats.setAtk(atk += 1);
                 playerStats.setCake(cake -= 1);
                 updateDisplay();
+            } else {
+                statDeficient.setText("You need at least 1 cake!");
             }
-
         }
 
     }
@@ -521,8 +566,10 @@ public class HomePagePanel extends JPanel {
             if (atk > 0) {
                 playerStats.setAtk(atk -= 1);
                 playerStats.setCake(cake += 1);
+                updateDisplay();
+            } else {
+                statDeficient.setText("You need at least 1 attack!");
             }
-            updateDisplay();
         }
 
     }
@@ -537,6 +584,8 @@ public class HomePagePanel extends JPanel {
                 playerStats.setAtk(atk += 10);
                 playerStats.setCake(cake -= 10);
                 updateDisplay();
+            } else {
+                statDeficient.setText("You need at least 10 cakes!");
             }
 
         }
@@ -552,8 +601,11 @@ public class HomePagePanel extends JPanel {
             if (atk >= 10) {
                 playerStats.setAtk(atk -= 10);
                 playerStats.setCake(cake += 10);
+                updateDisplay();
+            } else {
+                statDeficient.setText("You need at least 10 attack!");
             }
-            updateDisplay();
+
         }
 
     }
@@ -567,8 +619,11 @@ public class HomePagePanel extends JPanel {
             if (cake > 0) {
                 playerStats.setHealth(health += 1);
                 playerStats.setCake(cake -= 1);
+                updateDisplay();
+            } else {
+                statDeficient.setText("You need at least 1 cake!");
             }
-            updateDisplay();
+            
         }
 
     }
@@ -582,10 +637,11 @@ public class HomePagePanel extends JPanel {
             if (health > 0) {
                 playerStats.setHealth(health -= 1);
                 playerStats.setCake(cake += 1);
+                updateDisplay();
+            } else {
+                statDeficient.setText("You need at least 1 health!");
             }
-            updateDisplay();
         }
-
     }
 
     public class HealthIncrease10Listener implements ActionListener {
@@ -596,8 +652,11 @@ public class HomePagePanel extends JPanel {
             if (cake >= 10) {
                 playerStats.setHealth(health += 10);
                 playerStats.setCake(cake -= 10);
+                updateDisplay();
+            } else {
+                statDeficient.setText("You need at least 10 cakes!");
             }
-            updateDisplay();
+            
         }
     }
 
@@ -609,8 +668,11 @@ public class HomePagePanel extends JPanel {
             if (health >= 10) {
                 playerStats.setHealth(health -= 10);
                 playerStats.setCake(cake += 10);
+                updateDisplay();
+            } else {
+                statDeficient.setText("You need at least 10 health!");
             }
-            updateDisplay();
+            
         }
     }
 
@@ -619,7 +681,7 @@ public class HomePagePanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(null,
-                    "Spend 1 cake for a +1 increase in attack or health! \n Decrease your attack or health by 1 for +1 cake!",
+                    "Spend 1 cake for a +1 increase or 10 cakes for a +10 increase in attack or health! \n Decrease your attack or health get cakes back!",
                     "How to Change Your Stats",
                     JOptionPane.INFORMATION_MESSAGE);
         }
@@ -635,6 +697,10 @@ public class HomePagePanel extends JPanel {
             int cake = playerStats.getCake();
             if (cake >= 50) {
                 playerStats.setCake(cake -= 50);
+                if (gambleNumber == 1) {
+                    playerStats.setCake(cake += 500);
+                    gambleText.setText("JACKPOT! You win 500 cakes! Play again?");
+                }
                 if (gambleNumber <= 3) {
                     playerStats.setCake(cake += 200);
                     gambleText.setText("You win 200 cakes! Play again?");
@@ -687,7 +753,7 @@ public class HomePagePanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(null,
-                    "Fight bosses to earn cake!\nRecommended (minimum): 10 Health for Boss 1, 30 Health for Boss 2, 50 Health for Boss 3",
+                    "Fight bosses to earn cake!\nWhen you enter battle, you have a 50% chance of attacking first, so prepare accordingly!\nRecommended (minimum): 20 Health for Boss 1, 50 Health for Boss 2, 150 Health for Boss 3",
                     "Tips for Fighting",
                     JOptionPane.INFORMATION_MESSAGE);
         }
@@ -714,6 +780,7 @@ public class HomePagePanel extends JPanel {
             } else if (fightBoss2) {
                 boss2Panel.checkPlayerHealth();
                 boss2Panel.refreshDisplay();
+                boss2Panel.updateDisplay();
                 hpFrame.setHomePageVisibility(false);
                 boss2Frame.setBoss2Visibility(true);
                 hpFrame.updateFrame();
@@ -721,6 +788,7 @@ public class HomePagePanel extends JPanel {
             } else if (fightBoss3) {
                 boss3Panel.checkPlayerHealth();
                 boss3Panel.refreshDisplay();
+                boss3Panel.updateDisplay();
                 hpFrame.setHomePageVisibility(false);
                 boss3Frame.setBoss3Visibility(true);
                 hpFrame.updateFrame();
