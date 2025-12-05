@@ -15,8 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
-
-//import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -27,13 +25,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
-//import javax.swing.SwingConstants;
 
 public class HomePagePanel extends JPanel {
 
+    // Instantiate all variables and GUI components
     private JLabel cakeLabel;
     private JButton cakeClicker;
-
     private JButton tutorialButton;
 
     private JLabel atkLabel;
@@ -62,13 +59,12 @@ public class HomePagePanel extends JPanel {
     private JRadioButton boss3;
     private boolean fightBoss3;
     private ButtonGroup bossButtonGroup;
-
     private JButton bossInfo;
+    private JButton fightButton;
 
     private JLabel rakko1;
     private ImageIcon rakko1Icon;
 
-    private JButton fightButton;
     private HomePageFrame hpFrame;
     private Boss1Frame boss1Frame;
     private Boss1Panel boss1Panel;
@@ -84,6 +80,7 @@ public class HomePagePanel extends JPanel {
     private Font chiruFont20;
     private Font chiruFont25;
 
+    // getters and setters (to connect panels and frames)
     public HomePageFrame getHpFrame() {
         return hpFrame;
     }
@@ -148,12 +145,15 @@ public class HomePagePanel extends JPanel {
         this.playerStats = playerStats;
     }
 
+    // default constructor
     public HomePagePanel() {
+        // sets basic traits of the whole panel
         setPreferredSize(new Dimension(1000, 600));
         Color backgroundColor = Color.decode("#FCF9FB");
         setBackground(backgroundColor);
         setLayout(new BorderLayout());
 
+        // custom colors
         Color usagiBeige = Color.decode("#FEEEC8");
         Color hachiBlue = Color.decode("#A1CBDC");
         Color chiikawaPink = Color.decode("#EEC2C7");
@@ -184,23 +184,22 @@ public class HomePagePanel extends JPanel {
             System.err.println("Warning: couldn't load chirufont.ttf - " + e.getMessage());
         }
 
+        // different sized fonts
         chiruFont15 = this.chiruFont.deriveFont(Font.BOLD, 15);
         chiruFont20 = this.chiruFont.deriveFont(Font.BOLD, 20);
         chiruFont25 = this.chiruFont.deriveFont(Font.BOLD, 25);
 
-        
         // Clicker Aspect
         JPanel clickerPanel = new JPanel();
-        clickerPanel.setLayout(new BorderLayout());
-
         clickerPanel.setPreferredSize(new Dimension(200, 50));
         clickerPanel.setBackground(usagiBeige);
         clickerPanel.setLayout(new BorderLayout());
-
         add(clickerPanel, BorderLayout.PAGE_START);
 
+        // cake label
         cakeLabel = new JLabel("Cake: " + 0);
         cakeLabel.setFont(chiruFont25);
+        // cake button
         cakeClicker = new JButton("Click Here For Cake!");
         cakeClicker.setFont(chiruFont20);
         ClickerListener clickListener = new ClickerListener();
@@ -208,12 +207,12 @@ public class HomePagePanel extends JPanel {
         clickerPanel.add(cakeLabel, BorderLayout.PAGE_START);
         clickerPanel.add(cakeClicker, BorderLayout.CENTER);
 
+        // tutorial button
         tutorialButton = new JButton("How To Play");
         tutorialButton.setFont(this.chiruFont);
         TutorialListener tutorialListener = new TutorialListener();
         tutorialButton.addActionListener(tutorialListener);
         clickerPanel.add(tutorialButton, BorderLayout.LINE_END);
-
 
         // Stats aspect
         JPanel statsPanel = new JPanel();
@@ -221,9 +220,10 @@ public class HomePagePanel extends JPanel {
         statsPanel.setBackground(hachiBlue);
         statsPanel.setPreferredSize(new Dimension(240, 100));
         statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.PAGE_AXIS));
+
         statsPanel.add(Box.createRigidArea(new Dimension(0, 120)));
 
-        // Attack aspect
+        // Attack aspect, created subpanel of statsPanel
         JPanel atkPanel = new JPanel();
         statsPanel.add(atkPanel);
         atkPanel.setPreferredSize(new Dimension(240, 50));
@@ -231,23 +231,27 @@ public class HomePagePanel extends JPanel {
         atkPanel.setLayout(new BoxLayout(atkPanel, BoxLayout.PAGE_AXIS));
         atkPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
+        // attack label
         atkLabel = new JLabel("Attack: " + 0);
         atkLabel.setFont(chiruFont25);
         atkLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         atkPanel.add(atkLabel);
 
+        // created subpanel of attackPanel
         JPanel atkButtonPanel = new JPanel();
         atkPanel.add(atkButtonPanel);
         atkButtonPanel.setBackground(atkGreen);
         atkButtonPanel.setLayout(new BoxLayout(atkButtonPanel, BoxLayout.LINE_AXIS));
         atkButtonPanel.add(Box.createRigidArea(new Dimension(20, 10)));
 
+        // increase attack +1 button
         atkButtonIncrease = new JButton("+1");
         atkButtonIncrease.setFont(this.chiruFont);
         atkButtonPanel.add(atkButtonIncrease);
         AttackIncreaseListener atkIListener = new AttackIncreaseListener();
         atkButtonIncrease.addActionListener(atkIListener);
 
+        // decrease attack -1 button
         atkButtonDecrease = new JButton("-1");
         atkButtonDecrease.setFont(this.chiruFont);
         atkButtonPanel.add(atkButtonDecrease);
@@ -256,18 +260,21 @@ public class HomePagePanel extends JPanel {
 
         atkButtonPanel.add(Box.createRigidArea(new Dimension(20, 10)));
 
+        // created subpanel of attackPanel
         JPanel atkButtonPanel10 = new JPanel();
         atkPanel.add(atkButtonPanel10);
         atkButtonPanel10.setBackground(atkGreen);
         atkButtonPanel10.setLayout(new BoxLayout(atkButtonPanel10, BoxLayout.LINE_AXIS));
         atkButtonPanel10.add(Box.createRigidArea(new Dimension(20, 10)));
 
+        // increase attack +10 button
         atkButtonIncrease10 = new JButton("+10");
         atkButtonIncrease10.setFont(this.chiruFont);
         atkButtonPanel10.add(atkButtonIncrease10);
         AttackIncrease10Listener atkI10Listener = new AttackIncrease10Listener();
         atkButtonIncrease10.addActionListener(atkI10Listener);
 
+        // decrease attack -10 button
         atkButtonDecrease10 = new JButton("-10");
         atkButtonDecrease10.setFont(this.chiruFont);
         atkButtonPanel10.add(atkButtonDecrease10);
@@ -285,24 +292,28 @@ public class HomePagePanel extends JPanel {
         healthPanel.setPreferredSize(new Dimension(250, 50));
         healthPanel.setBackground(healthRed);
 
+        // health label
         healthLabel = new JLabel("Health: " + 0);
         healthLabel.setFont(chiruFont25);
         healthLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         healthPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         healthPanel.add(healthLabel);
 
+        // created subpanel of healthPanel
         JPanel healthButtonPanel = new JPanel();
         healthPanel.add(healthButtonPanel);
         healthButtonPanel.setBackground(healthRed);
         healthButtonPanel.setLayout(new BoxLayout(healthButtonPanel, BoxLayout.LINE_AXIS));
         healthButtonPanel.add(Box.createRigidArea(new Dimension(20, 10)));
 
+        // increase health +1 button
         healthButtonIncrease = new JButton("+1");
         healthButtonIncrease.setFont(this.chiruFont);
         healthButtonPanel.add(healthButtonIncrease);
         HealthIncreaseListener healthIListener = new HealthIncreaseListener();
         healthButtonIncrease.addActionListener(healthIListener);
 
+        // decrease health -1 button
         healthButtonDecrease = new JButton("-1");
         healthButtonDecrease.setFont(this.chiruFont);
         healthButtonPanel.add(healthButtonDecrease);
@@ -311,18 +322,21 @@ public class HomePagePanel extends JPanel {
 
         healthButtonPanel.add(Box.createRigidArea(new Dimension(20, 10)));
 
+        // created subpanel of healthPanel
         JPanel healthButtonPanel10 = new JPanel();
         healthPanel.add(healthButtonPanel10);
         healthButtonPanel10.setBackground(healthRed);
         healthButtonPanel10.setLayout(new BoxLayout(healthButtonPanel10, BoxLayout.LINE_AXIS));
         healthButtonPanel10.add(Box.createRigidArea(new Dimension(20, 10)));
 
+        // increase health +10 button
         healthButtonIncrease10 = new JButton("+10");
         healthButtonIncrease10.setFont(this.chiruFont);
         healthButtonPanel10.add(healthButtonIncrease10);
         HealthIncrease10Listener healthI10Listener = new HealthIncrease10Listener();
         healthButtonIncrease10.addActionListener(healthI10Listener);
 
+        // decrease health -10 button
         healthButtonDecrease10 = new JButton("-10");
         healthButtonDecrease10.setFont(this.chiruFont);
         healthButtonPanel10.add(healthButtonDecrease10);
@@ -333,6 +347,7 @@ public class HomePagePanel extends JPanel {
 
         healthPanel.add(Box.createRigidArea(new Dimension(5, 10)));
 
+        // info JOptionPane (to guide players through game)
         statsInfo = new JButton("info");
         statsInfo.setFont(this.chiruFont);
         statsInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -343,6 +358,8 @@ public class HomePagePanel extends JPanel {
 
         statsPanel.add(Box.createRigidArea(new Dimension(5, 10)));
 
+        // label that appears when cake/attack/health are not enough to increase or
+        // decrease stats
         statDeficient = new JLabel("");
         statDeficient.setAlignmentX(Component.CENTER_ALIGNMENT);
         statDeficient.setFont(chiruFont15);
@@ -357,11 +374,14 @@ public class HomePagePanel extends JPanel {
 
         gamblePanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
+        // Text to give instructions for gambling
+        // Text changes to announce results of gambling
         JPanel gambleTextPanel = new JPanel();
         gamblePanel.add(gambleTextPanel);
         gambleTextPanel.setLayout(new BoxLayout(gambleTextPanel, BoxLayout.LINE_AXIS));
         gambleTextPanel.setBackground(chiikawaPink);
 
+        // Chose JTextArea over JLabel to allow line wrapping
         gambleTextPanel.add(Box.createRigidArea(new Dimension(8, 0)));
         gambleText = new JTextArea("Press the button to gamble for a chance to win up to 500 cakes!");
         gambleText.setFont(this.chiruFont);
@@ -373,6 +393,7 @@ public class HomePagePanel extends JPanel {
         gambleTextPanel.add(gambleText);
         gambleTextPanel.add(Box.createRigidArea(new Dimension(8, 0)));
 
+        // Gambling button
         gambleButton = new JButton("Gamble!(costs 50 cakes)");
         gambleButton.setFont(this.chiruFont);
         gambleButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -400,6 +421,8 @@ public class HomePagePanel extends JPanel {
         bossPanel.add(boss1);
         bossPanel.add(boss2);
         bossPanel.add(boss3);
+
+        // sets 1st one selected at beginning and locks boss 2 and 3
         boss1.setSelected(true);
         fightBoss1 = true;
         boss2.setEnabled(false);
@@ -411,11 +434,13 @@ public class HomePagePanel extends JPanel {
         boss2.addActionListener(bossListener);
         boss3.addActionListener(bossListener);
 
+        // JOptionPane to detail how fighting works and give recommended health stats
         bossInfo = new JButton("?");
         bossPanel.add(bossInfo);
         BossInfoListener bossInfoListener = new BossInfoListener();
         bossInfo.addActionListener(bossInfoListener);
 
+        // button to trigger fighting the bosses
         fightButton = new JButton("Fight!");
         fightButton.setFont(this.chiruFont);
         bossPanel.add(fightButton);
@@ -426,39 +451,13 @@ public class HomePagePanel extends JPanel {
         JPanel rakkoPanel = new JPanel();
         add(rakkoPanel, BorderLayout.CENTER);
         rakkoPanel.setBackground(backgroundColor);
-        // rakkoPanel.setLayout(new BorderLayout());
         rakko1 = new JLabel("");
-        // firstRakko1Icon = new
-        // ImageIcon(getClass().getResource("/rakko-chiikawa.gif"));
-        // Image tempRakko1 = firstRakko1Icon.getImage();
-        // Image bigTempRakko1 = tempRakko1.getScaledInstance(120, 120,
-        // java.awt.Image.SCALE_SMOOTH);
-        // Image bigRakko1 = getScaledImage(tempRakko1,50,50);
-        // ImageIcon rakko1Icon = new ImageIcon(bigRakko1);
-
-        // rakko1.setIcon(new ImageIcon(new
-        // ImageIcon(getClass().getResource("/rakko-chiikawa.gif")).getImage().getScaledInstance(200,
-        // 50, Image.SCALE_SMOOTH)));
-
         rakko1Icon = new ImageIcon(getClass().getResource("/rakko-chiikawa-1.gif"));
         rakko1.setIcon(rakko1Icon);
         rakkoPanel.add(rakko1);
-
-        
-
     }
 
-    public Image getScaledImage(Image srcImg, int w, int h) {
-        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = resizedImg.createGraphics();
-
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.drawImage(srcImg, 0, 0, w, h, null);
-        g2.dispose();
-
-        return resizedImg;
-    }
-
+    // updates the labels when changes are made
     public void updateDisplay() {
         cakeLabel.setText("Cake: " + playerStats.getCake());
         atkLabel.setText("Attack: " + playerStats.getAtk());
@@ -466,6 +465,8 @@ public class HomePagePanel extends JPanel {
         statDeficient.setText("");
     }
 
+    // refreshes the display to prevent any negative health and to check the status
+    // of boss (win/lose)
     public void refreshDisplay() {
         checkBossStatus();
         if (playerStats.getHealth() < 0) {
@@ -473,6 +474,8 @@ public class HomePagePanel extends JPanel {
         }
     }
 
+    // checks if you won against each boss, gives cake reward as necessary, and
+    // unlocks next boss
     private void checkBossStatus() {
         int cake = playerStats.getCake();
         if (boss1Panel.isBoss1Status()) {
@@ -506,7 +509,8 @@ public class HomePagePanel extends JPanel {
         if (boss3Panel.isBoss3Status()) {
             playerStats.setCake(cake += 300);
             updateDisplay();
-            JOptionPane.showMessageDialog(null, "You beat the third boss and earned 300 more cakes! Congratulations on beating the game!",
+            JOptionPane.showMessageDialog(null,
+                    "You beat the third boss and earned 300 more cakes! Congratulations on beating the game!",
                     "Boss 3 Complete!",
                     JOptionPane.PLAIN_MESSAGE);
         }
@@ -518,30 +522,29 @@ public class HomePagePanel extends JPanel {
         }
     }
 
+    // action listener for cake clicker, increases cake by +1 after each click
     public class ClickerListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             int cake = playerStats.getCake();
             playerStats.setCake(cake += 1);
             updateDisplay();
         }
-
     }
 
+    // action listener for tutorial, creates JOptionPane to give tutorial
     public class TutorialListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(null, "Earn cakes through clicking, fighting bosses, and trying your luck through gambling!\nCakes can be used to upgrade Rakko's stats to fight harder bosses.\nBeat all three bosses to complete the game!",
+            JOptionPane.showMessageDialog(null,
+                    "Earn cakes through clicking, fighting bosses, and trying your luck through gambling!\nCakes can be used to upgrade Rakko's stats to fight harder bosses.\nBeat all three bosses to complete the game!",
                     "How To Play",
                     JOptionPane.INFORMATION_MESSAGE);
         }
-        
     }
 
+    // action listener for attack increase +1
     public class AttackIncreaseListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             int cake = playerStats.getCake();
@@ -554,11 +557,10 @@ public class HomePagePanel extends JPanel {
                 statDeficient.setText("You need at least 1 cake!");
             }
         }
-
     }
 
+    // action listener for attack decrease -1
     public class AttackDecreaseListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             int atk = playerStats.getAtk();
@@ -571,11 +573,10 @@ public class HomePagePanel extends JPanel {
                 statDeficient.setText("You need at least 1 attack!");
             }
         }
-
     }
 
+    // action listener for attack increase +10
     public class AttackIncrease10Listener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             int cake = playerStats.getCake();
@@ -587,13 +588,11 @@ public class HomePagePanel extends JPanel {
             } else {
                 statDeficient.setText("You need at least 10 cakes!");
             }
-
         }
-
     }
 
+    // action listener for attack decrease -10
     public class AttackDecrease10Listener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             int atk = playerStats.getAtk();
@@ -605,13 +604,11 @@ public class HomePagePanel extends JPanel {
             } else {
                 statDeficient.setText("You need at least 10 attack!");
             }
-
         }
-
     }
 
+    // action listener for health increase +1
     public class HealthIncreaseListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             int health = playerStats.getHealth();
@@ -623,13 +620,11 @@ public class HomePagePanel extends JPanel {
             } else {
                 statDeficient.setText("You need at least 1 cake!");
             }
-            
         }
-
     }
 
+    // action listener for health decrease -1
     public class HealthDecreaseListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             int health = playerStats.getHealth();
@@ -644,6 +639,7 @@ public class HomePagePanel extends JPanel {
         }
     }
 
+    // action listener for health increase +10
     public class HealthIncrease10Listener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -656,10 +652,10 @@ public class HomePagePanel extends JPanel {
             } else {
                 statDeficient.setText("You need at least 10 cakes!");
             }
-            
         }
     }
 
+    // action listener for health decrease -10
     public class HealthDecrease10Listener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -672,12 +668,11 @@ public class HomePagePanel extends JPanel {
             } else {
                 statDeficient.setText("You need at least 10 health!");
             }
-            
         }
     }
 
+    // action listener for tutorial about how to change stats
     public class StatsInfoListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(null,
@@ -685,32 +680,34 @@ public class HomePagePanel extends JPanel {
                     "How to Change Your Stats",
                     JOptionPane.INFORMATION_MESSAGE);
         }
-
     }
 
+    // action listener for gambling system
     public class GambleListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             Random rand = new Random();
             gambleNumber = rand.nextInt(1, 101);
             int cake = playerStats.getCake();
+            // requires 50 cake to start
             if (cake >= 50) {
                 playerStats.setCake(cake -= 50);
+                // probabilities: 1% for 500, 3% for 200, 10% for 100, 25% for 75, 25% for 25,
+                // 36% for nothing
                 if (gambleNumber == 1) {
                     playerStats.setCake(cake += 500);
                     gambleText.setText("JACKPOT! You win 500 cakes! Play again?");
                 }
-                if (gambleNumber <= 3) {
+                if (gambleNumber <= 4) {
                     playerStats.setCake(cake += 200);
                     gambleText.setText("You win 200 cakes! Play again?");
-                } else if (gambleNumber <= 13) {
+                } else if (gambleNumber <= 14) {
                     playerStats.setCake(cake += 100);
                     gambleText.setText("You win 100 cakes! Play again?");
-                } else if (gambleNumber <= 38) {
+                } else if (gambleNumber <= 39) {
                     playerStats.setCake(cake += 75);
                     gambleText.setText("You win 75 cakes! Play again?");
-                } else if (gambleNumber <= 63) {
+                } else if (gambleNumber <= 64) {
                     playerStats.setCake(cake += 25);
                     gambleText.setText("You win 25 cakes! Play again?");
                 } else {
@@ -720,17 +717,16 @@ public class HomePagePanel extends JPanel {
                 gambleText.setText("You need at least 50 cakes to gamble!");
             }
             updateDisplay();
-
         }
-
     }
 
+    // action listener for boss fight radio buttons
     public class BossListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             JRadioButton chosenButton = (JRadioButton) e.getSource();
             if (chosenButton == boss1) {
+                // fightBoss booleans indicate which boss to fight in FightListener
                 fightBoss1 = true;
                 fightBoss2 = false;
                 fightBoss3 = false;
@@ -744,12 +740,11 @@ public class HomePagePanel extends JPanel {
                 fightBoss2 = false;
             }
             updateDisplay();
-
         }
     }
 
+    // action listener for tutorial about how fighting works and tips
     public class BossInfoListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(null,
@@ -757,11 +752,10 @@ public class HomePagePanel extends JPanel {
                     "Tips for Fighting",
                     JOptionPane.INFORMATION_MESSAGE);
         }
-
     }
 
+    // action listener for fight button
     public class FightListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             if (playerStats.getHealth() <= 0) {
@@ -770,6 +764,7 @@ public class HomePagePanel extends JPanel {
                         "Health Too Low",
                         JOptionPane.PLAIN_MESSAGE);
             } else if (fightBoss1) {
+                // connects to other panels and frames
                 boss1Panel.checkPlayerHealth();
                 boss1Panel.refreshDisplay();
                 boss1Panel.updateDisplay();
@@ -794,8 +789,7 @@ public class HomePagePanel extends JPanel {
                 hpFrame.updateFrame();
                 boss3Frame.updateFrame();
             }
-
         }
-
     }
+
 }

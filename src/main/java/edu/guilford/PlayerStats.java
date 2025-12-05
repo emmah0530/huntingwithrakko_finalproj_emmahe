@@ -1,6 +1,7 @@
 package edu.guilford;
 
 public class PlayerStats {
+    // this class contains the stats, making them easier to share between classes/panels
     private int cake;
     private int atk;
     private int health;
@@ -35,5 +36,4 @@ public class PlayerStats {
         atk = 0;
     }
 
-    
 }

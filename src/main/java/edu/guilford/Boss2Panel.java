@@ -18,6 +18,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
+// contains the same code as the other two boss panels, but with different health and attack and variable names
+// boss health: 500
+// boss attack: 50
 public class Boss2Panel extends JPanel {
     private int boss2Atk;
     private int boss2Health;
@@ -232,7 +235,6 @@ public class Boss2Panel extends JPanel {
         characterPanel.add(fightRakko2Label);
         fightRakko2 = new ImageIcon(getClass().getResource("/rakko2.png"));
         fightRakko2Label.setIcon(fightRakko2);
-
     }
 
     public void checkPlayerHealth() {
@@ -256,7 +258,6 @@ public class Boss2Panel extends JPanel {
         fightOrder = rand.nextInt(1, 101);
         checkPlayerHealth();
         fightOrderDecision();
-
     }
 
     public void fightOrderDecision() {
@@ -268,15 +269,12 @@ public class Boss2Panel extends JPanel {
             updateDisplay();
             checkPlayerHealth();
             bossTimer.stop();
-
         } else if (fightOrder > 50) { // boss goes first
             attackButton.setEnabled(false);
             fightOrderLabel.setText("Boss's Turn!");
             fightRakko1Label.setVisible(true);
             fightRakko2Label.setVisible(false);
-
             bossTimer.restart();
-
         }
     }
 
@@ -297,7 +295,6 @@ public class Boss2Panel extends JPanel {
     }
 
     public class AttackListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             boss2Health -= playerStats.getAtk();
@@ -310,20 +307,16 @@ public class Boss2Panel extends JPanel {
                 returnHome();
             }
         }
-
     }
 
     public class HomeListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             returnHome();
         }
-
     }
 
     public class TimerListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             int playerHealth = playerStats.getHealth();
@@ -333,7 +326,5 @@ public class Boss2Panel extends JPanel {
             fightOrder = 1;
             fightOrderDecision();
         }
-
     }
-
 }

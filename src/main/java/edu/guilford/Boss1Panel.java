@@ -10,9 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
-
 import javax.swing.Timer;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -21,13 +19,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Boss1Panel extends JPanel {
+    // instantiates variables and GUI components
     private int boss1Atk;
     private int boss1Health;
+
     private JButton attackButton;
     private int playerAtk;
     private JLabel playerAtkLabel;
     private JLabel playerHealthLabel;
     private JLabel boss1HealthLabel;
+
     private int fightOrder;
     private JLabel fightOrderLabel;
     private JButton returnHome;
@@ -54,6 +55,7 @@ public class Boss1Panel extends JPanel {
     private Boss2Panel boss2Panel;
     private Boss3Panel boss3Panel;
 
+    // getters and setters (mostly to connect classes)
     public int getPlayerAtk() {
         return playerAtk;
     }
@@ -127,13 +129,16 @@ public class Boss1Panel extends JPanel {
     }
 
     public Boss1Panel() {
+        // establishes basic traits of the panel
         setPreferredSize(new Dimension(1000, 600));
         Color backgroundColor = Color.decode("#FCF9FB");
         setBackground(backgroundColor);
         setLayout(new BorderLayout());
 
+        // custom colors
         Color usagiBeige = Color.decode("#FEEEC8");
 
+        // creates font
         try {
             InputStream is = HomePagePanel.class.getResourceAsStream("/chirufont.ttf");
             Font loaded = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -149,16 +154,19 @@ public class Boss1Panel extends JPanel {
             System.err.println("Warning: couldn't load chirufont.ttf - " + e.getMessage());
         }
 
+        // cutsom fonts
         chiruFont25 = this.chiruFont.deriveFont(Font.BOLD, 25);
 
+        // boss stats
         boss1Atk = 20;
         boss1Health = 100;
-        //boss1Status = false;
 
+        // creates timer for turn based combat
         int delay = 2000;
         TimerListener timerListener = new TimerListener();
         bossTimer = new Timer(delay, timerListener);
 
+        // attack button created
         attackButton = new JButton("Attack");
         attackButton.setFont(chiruFont25);
         attackButton.setPreferredSize(new Dimension(1000, 50));
@@ -166,6 +174,7 @@ public class Boss1Panel extends JPanel {
         AttackListener atkListener = new AttackListener();
         attackButton.addActionListener(atkListener);
 
+        // JPanel for the top part
         JPanel topPanel = new JPanel();
         topPanel.setBackground(usagiBeige);
         topPanel.setPreferredSize(new Dimension(1000, 50));
@@ -173,38 +182,47 @@ public class Boss1Panel extends JPanel {
 
         topPanel.add(Box.createRigidArea(new Dimension(1000, 5)));
 
+        // label states who's turn it is
         fightOrderLabel = new JLabel();
         fightOrderLabel.setFont(chiruFont25);
         topPanel.add(fightOrderLabel);
 
         topPanel.add(Box.createRigidArea(new Dimension(680, 0)));
 
+        // button to return home at any time
         returnHome = new JButton("Return Home");
         returnHome.setFont(this.chiruFont);
         topPanel.add(returnHome);
         HomeListener homeListener = new HomeListener();
         returnHome.addActionListener(homeListener);
 
+        // panel on the right side holding player's stats
         JPanel playerStatsPanel = new JPanel();
         playerStatsPanel.setBackground(Color.white);
         add(playerStatsPanel, BorderLayout.LINE_END);
         playerStatsPanel.setLayout(new BoxLayout(playerStatsPanel, BoxLayout.LINE_AXIS));
 
+        // subpanel of playerStatsPanel used for layout reasons
         JPanel playerStatsSubPanel = new JPanel();
         playerStatsSubPanel.setBackground(Color.white);
         playerStatsSubPanel.setLayout(new BoxLayout(playerStatsSubPanel, BoxLayout.PAGE_AXIS));
         playerStatsPanel.add(playerStatsSubPanel);
 
+        // label for player's health
         playerHealthLabel = new JLabel("Your Health: " + 0);
         playerHealthLabel.setFont(chiruFont25);
         playerStatsSubPanel.add(playerHealthLabel);
 
         playerStatsSubPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+        
+        // label for player's attack
         playerAtkLabel = new JLabel("Your Attack: " + 0);
         playerAtkLabel.setFont(chiruFont25);
         playerStatsSubPanel.add(playerAtkLabel);
         playerStatsPanel.add(Box.createRigidArea(new Dimension(20, 0)));
 
+
+        // panel for boss's stats (only health is visible)
         JPanel bossStatsPanel = new JPanel();
         bossStatsPanel.setBackground(Color.white);
         add(bossStatsPanel, BorderLayout.LINE_START);
@@ -213,17 +231,20 @@ public class Boss1Panel extends JPanel {
         boss1HealthLabel.setFont(chiruFont25);
         bossStatsPanel.add(boss1HealthLabel);
 
+        // panel for Rakko and the boss's icon to be on
         JPanel characterPanel = new JPanel();
         characterPanel.setBackground(Color.white);
         characterPanel.setLayout(new BoxLayout(characterPanel, BoxLayout.LINE_AXIS));
         add(characterPanel, BorderLayout.CENTER);
 
+        // adds boss to the panel
         characterPanel.add(Box.createRigidArea(new Dimension(35, 0)));
         boss1Label = new JLabel("");
         characterPanel.add(boss1Label);
         boss1 = new ImageIcon(getClass().getResource("/boss1.png"));
         boss1Label.setIcon(boss1);
 
+        // two different images of Rakko depending on if its player's turn or not
         fightRakko1Label = new JLabel("");
         characterPanel.add(fightRakko1Label);
         fightRakko1 = new ImageIcon(getClass().getResource("/rakko1.png"));
@@ -232,9 +253,9 @@ public class Boss1Panel extends JPanel {
         characterPanel.add(fightRakko2Label);
         fightRakko2 = new ImageIcon(getClass().getResource("/rakko2.png"));
         fightRakko2Label.setIcon(fightRakko2);
-
     }
 
+    // checks if player still has health, and if not, returns home and lets the home page know that player lost
     public void checkPlayerHealth() {
         if (playerStats.getHealth() <= 0) {
             returnHome();
@@ -242,6 +263,7 @@ public class Boss1Panel extends JPanel {
         }
     }
 
+    // refreshes display each time you want to fight the boss
     public void refreshDisplay() {
         boss1Lost = false;
         boss1Health = 100;
@@ -256,9 +278,9 @@ public class Boss1Panel extends JPanel {
         fightOrder = rand.nextInt(1, 101);
         checkPlayerHealth();
         fightOrderDecision();
-
     }
 
+    // sets the fight order, with 50/50 chance of player going first
     public void fightOrderDecision() {
         if (fightOrder < 50) { // Player goes first
             attackButton.setEnabled(true);
@@ -268,24 +290,23 @@ public class Boss1Panel extends JPanel {
             updateDisplay();
             checkPlayerHealth();
             bossTimer.stop();
-
         } else if (fightOrder > 50) { // boss goes first
             attackButton.setEnabled(false);
             fightOrderLabel.setText("Boss's Turn!");
             fightRakko1Label.setVisible(true);
             fightRakko2Label.setVisible(false);
-
             bossTimer.restart();
-
         }
     }
 
+    // updates the GUI display with updates stats
     public void updateDisplay() {
         playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
         boss1HealthLabel.setText("Boss Health: " + boss1Health);
     }
 
+    // ends the fight and returns player to home page
     public void returnHome() {
         bossTimer.stop();
         hpFrame.setHomePageVisibility(true);
@@ -296,8 +317,8 @@ public class Boss1Panel extends JPanel {
         hpPanel.updateDisplay();
     }
 
+    // action listener for attack button, ends player turn after attack
     public class AttackListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             boss1Health -= playerStats.getAtk();
@@ -310,18 +331,17 @@ public class Boss1Panel extends JPanel {
                 returnHome();
             }
         }
-
     }
 
+    // action listener for the return home button
     public class HomeListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             returnHome();
         }
-
     }
 
+    // timer listener creates the event that happens after the timer delay ends
     public class TimerListener implements ActionListener {
 
         @Override
@@ -333,7 +353,5 @@ public class Boss1Panel extends JPanel {
             fightOrder = 1;
             fightOrderDecision();
         }
-
     }
-
 }

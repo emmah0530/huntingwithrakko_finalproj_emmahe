@@ -20,6 +20,7 @@ public class HomePageFrame extends JFrame {
         this.homePageVisibility = homePageVisibility;
     }
 
+    // method used to open and close frame
     public void updateFrame() {
         if (homePageVisibility) {
             this.setVisible(true);
@@ -27,6 +28,5 @@ public class HomePageFrame extends JFrame {
             this.setVisible(false);
         }
     }
-    
     
 }

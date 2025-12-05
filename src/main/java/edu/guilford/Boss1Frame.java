@@ -19,6 +19,7 @@ public class Boss1Frame extends JFrame{
         this.boss1Visibility = fightPageVisibility;
     }
 
+    // method used to open and close frame
     public void updateFrame() {
         if (boss1Visibility) {
             this.setVisible(true);
