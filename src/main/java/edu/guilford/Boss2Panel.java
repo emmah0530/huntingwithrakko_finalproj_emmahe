@@ -247,6 +247,7 @@ public class Boss2Panel extends JPanel {
         boss2Health = 2;
         boss2Status = false;
         boss1Panel.setBoss1Status(false);
+        boss3Panel.setBoss3Status(false);
         playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
         Random rand = new Random();

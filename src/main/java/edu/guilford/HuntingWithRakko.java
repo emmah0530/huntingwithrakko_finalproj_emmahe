@@ -35,6 +35,8 @@ public class HuntingWithRakko {
         homePage.setBoss1Frame(boss1Window);
         homePage.setBoss2Panel(boss2Page);
         homePage.setBoss2Frame(boss2Window);
+        homePage.setBoss3Panel(boss3Page);
+        homePage.setBoss3Frame(boss3Window);
         homePage.setHpFrame(homePageWindow);
         homePage.setPlayerStats(playerStats);        
         

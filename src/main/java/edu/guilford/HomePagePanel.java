@@ -719,10 +719,12 @@ public class HomePagePanel extends JPanel {
                 hpFrame.updateFrame();
                 boss2Frame.updateFrame();
             } else if (fightBoss3) {
+                boss3Panel.checkPlayerHealth();
+                boss3Panel.refreshDisplay();
                 hpFrame.setHomePageVisibility(false);
-                // boss3Frame.setBoss2Visibility(true);
+                boss3Frame.setBoss3Visibility(true);
                 hpFrame.updateFrame();
-                // boss3Frame.updateFrame();
+                boss3Frame.updateFrame();
             }
 
         }
