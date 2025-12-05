@@ -1,15 +1,22 @@
 package edu.guilford;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Random;
-
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Random;
+import javax.swing.Timer;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 
 public class Boss2Panel extends JPanel {
     private int boss2Atk;
@@ -23,11 +30,7 @@ public class Boss2Panel extends JPanel {
 
     private int fightOrder;
     private JLabel fightOrderLabel;
-    private JButton returnHome; // temp button
-    private HomePagePanel hpPanel;
-    private HomePageFrame hpFrame;
-    private Boss2Frame boss2Frame;
-    private PlayerStats playerStats;
+    private JButton returnHome;
 
     private JLabel fightRakko1Label;
     private ImageIcon fightRakko1;
@@ -37,6 +40,27 @@ public class Boss2Panel extends JPanel {
     private ImageIcon boss2;
 
     private boolean boss2Status;
+    private boolean boss2Lost;
+
+    private Timer bossTimer;
+
+    private Font chiruFont;
+    private Font chiruFont25;
+
+    private HomePagePanel hpPanel;
+    private HomePageFrame hpFrame;
+    private Boss2Frame boss2Frame;
+    private PlayerStats playerStats;
+    private Boss1Panel boss1Panel;
+    private Boss3Panel boss3Panel;
+
+    public int getPlayerAtk() {
+        return playerAtk;
+    }
+
+    public void setPlayerAtk(int playerAtk) {
+        this.playerAtk = playerAtk;
+    }
 
     public HomePageFrame getHpFrame() {
         return hpFrame;
@@ -58,14 +82,6 @@ public class Boss2Panel extends JPanel {
         return hpPanel;
     }
 
-    public int getPlayerAtk() {
-        return playerAtk;
-    }
-
-    public void setPlayerAtk(int playerAtk) {
-        this.playerAtk = playerAtk;
-    }
-
     public void setHpPanel(HomePagePanel hpPanel) {
         this.hpPanel = hpPanel;
     }
@@ -78,100 +94,189 @@ public class Boss2Panel extends JPanel {
         this.playerStats = playerStats;
     }
 
+    public Boss1Panel getBoss1Panel() {
+        return boss1Panel;
+    }
+
+    public void setBoss1Panel(Boss1Panel boss1Panel) {
+        this.boss1Panel = boss1Panel;
+    }
+
+    public Boss3Panel getBoss3Panel() {
+        return boss3Panel;
+    }
+
+    public void setBoss3Panel(Boss3Panel boss3Panel) {
+        this.boss3Panel = boss3Panel;
+    }
+
     public boolean isBoss2Status() {
         return boss2Status;
     }
 
-    public void setBoss2Status(boolean boss1Status) {
-        this.boss2Status = boss1Status;
+    public void setBoss2Status(boolean boss2Status) {
+        this.boss2Status = boss2Status;
+    }
+
+    public boolean isBoss2Lost() {
+        return boss2Lost;
+    }
+
+    public void setBoss2Lost(boolean boss2Lost) {
+        this.boss2Lost = boss2Lost;
     }
 
     public Boss2Panel() {
         setPreferredSize(new Dimension(1000, 600));
         Color backgroundColor = Color.decode("#FCF9FB");
         setBackground(backgroundColor);
+        setLayout(new BorderLayout());
+
+        Color usagiBeige = Color.decode("#FEEEC8");
+
+        try {
+            InputStream is = HomePagePanel.class.getResourceAsStream("/chirufont.ttf");
+            Font loaded = Font.createFont(Font.TRUETYPE_FONT, is);
+            // Register the font so it can be used by name elsewhere, and keep a derived
+            // instance for convenience.
+            java.awt.GraphicsEnvironment ge = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(loaded);
+            // Keep a default-sized version available for UI labels
+            this.chiruFont = loaded.deriveFont(Font.BOLD, 17f);
+        } catch (FontFormatException | IOException e) {
+            // If the font can't be read for any reason, print a message and continue using
+            // system fonts.
+            System.err.println("Warning: couldn't load chirufont.ttf - " + e.getMessage());
+        }
+
+        chiruFont25 = this.chiruFont.deriveFont(Font.BOLD, 25);
 
         boss2Atk = 1;
-        boss2Health = 10;
+        boss2Health = 2;
         boss2Status = false;
 
+        int delay = 2000;
+        TimerListener timerListener = new TimerListener();
+        bossTimer = new Timer(delay, timerListener);
+
         attackButton = new JButton("Attack");
-        add(attackButton);
+        attackButton.setFont(chiruFont25);
+        attackButton.setPreferredSize(new Dimension(1000, 50));
+        add(attackButton, BorderLayout.PAGE_END);
         AttackListener atkListener = new AttackListener();
         attackButton.addActionListener(atkListener);
 
+        JPanel topPanel = new JPanel();
+        topPanel.setBackground(usagiBeige);
+        topPanel.setPreferredSize(new Dimension(1000, 50));
+        add(topPanel, BorderLayout.PAGE_START);
+
+        topPanel.add(Box.createRigidArea(new Dimension(1000, 5)));
+
         fightOrderLabel = new JLabel();
-        add(fightOrderLabel);
+        fightOrderLabel.setFont(chiruFont25);
+        topPanel.add(fightOrderLabel);
 
-        playerAtkLabel = new JLabel("Your Attack: " + 0);
-        add(playerAtkLabel);
-
-        playerHealthLabel = new JLabel("Your Health: " + 0);
-        add(playerHealthLabel);
-
-        
-        boss2HealthLabel = new JLabel("Boss Health: " + boss2Health);
-        add(boss2HealthLabel);
+        topPanel.add(Box.createRigidArea(new Dimension(680, 0)));
 
         returnHome = new JButton("Return Home");
-        add(returnHome);
+        returnHome.setFont(this.chiruFont);
+        topPanel.add(returnHome);
         HomeListener homeListener = new HomeListener();
         returnHome.addActionListener(homeListener);
 
-        fightRakko1Label = new JLabel("");
-        add(fightRakko1Label);
-        fightRakko1 = new ImageIcon(getClass().getResource("/rakko1.png"));
-        fightRakko1Label.setIcon(fightRakko1);
-        fightRakko2Label = new JLabel("");
-        add(fightRakko2Label);
-        fightRakko2 = new ImageIcon(getClass().getResource("/rakko2.png"));
-        fightRakko2Label.setIcon(fightRakko2);
+        JPanel playerStatsPanel = new JPanel();
+        playerStatsPanel.setBackground(Color.white);
+        add(playerStatsPanel, BorderLayout.LINE_END);
+        playerStatsPanel.setLayout(new BoxLayout(playerStatsPanel, BoxLayout.LINE_AXIS));
 
+        JPanel playerStatsSubPanel = new JPanel();
+        playerStatsSubPanel.setBackground(Color.white);
+        playerStatsSubPanel.setLayout(new BoxLayout(playerStatsSubPanel, BoxLayout.PAGE_AXIS));
+        playerStatsPanel.add(playerStatsSubPanel);
+
+        playerHealthLabel = new JLabel("Your Health: " + 0);
+        playerHealthLabel.setFont(chiruFont25);
+        playerStatsSubPanel.add(playerHealthLabel);
+
+        playerStatsSubPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+        playerAtkLabel = new JLabel("Your Attack: " + 0);
+        playerAtkLabel.setFont(chiruFont25);
+        playerStatsSubPanel.add(playerAtkLabel);
+        playerStatsPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+
+        JPanel bossStatsPanel = new JPanel();
+        bossStatsPanel.setBackground(Color.white);
+        add(bossStatsPanel, BorderLayout.LINE_START);
+        bossStatsPanel.add(Box.createRigidArea(new Dimension(10, 500)));
+        boss2HealthLabel = new JLabel("Boss Health: " + boss2Health);
+        boss2HealthLabel.setFont(chiruFont25);
+        bossStatsPanel.add(boss2HealthLabel);
+
+        JPanel characterPanel = new JPanel();
+        characterPanel.setBackground(Color.white);
+        characterPanel.setLayout(new BoxLayout(characterPanel, BoxLayout.LINE_AXIS));
+        add(characterPanel, BorderLayout.CENTER);
+
+        characterPanel.add(Box.createRigidArea(new Dimension(50, 0)));
         boss2Label = new JLabel("");
-        add(boss2Label);
+        characterPanel.add(boss2Label);
         boss2 = new ImageIcon(getClass().getResource("/boss2.jpg"));
         boss2Label.setIcon(boss2);
 
+        fightRakko1Label = new JLabel("");
+        characterPanel.add(fightRakko1Label);
+        fightRakko1 = new ImageIcon(getClass().getResource("/rakko1.png"));
+        fightRakko1Label.setIcon(fightRakko1);
+        fightRakko2Label = new JLabel("");
+        characterPanel.add(fightRakko2Label);
+        fightRakko2 = new ImageIcon(getClass().getResource("/rakko2.png"));
+        fightRakko2Label.setIcon(fightRakko2);
+
+    }
+
+    public void checkPlayerHealth() {
+        if (playerStats.getHealth() <= 0) {
+            returnHome();
+            boss2Lost = true;
+        }
     }
 
     public void refreshDisplay() {
+        boss2Lost = false;
+        boss2Health = 2;
+        boss2Status = false;
+        boss1Panel.setBoss1Status(false);
         playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
         Random rand = new Random();
         fightOrder = rand.nextInt(1, 101);
         checkPlayerHealth();
         fightOrderDecision();
-        
-        
+
     }
 
     public void fightOrderDecision() {
-        if (fightOrder < 50) {
+        if (fightOrder < 50) { // Player goes first
             attackButton.setEnabled(true);
             fightOrderLabel.setText("Your Turn!");
             fightRakko1Label.setVisible(false);
             fightRakko2Label.setVisible(true);
             updateDisplay();
-            //checkPlayerHealth();
-        } else if (fightOrder > 50) {
+            checkPlayerHealth();
+            bossTimer.stop();
+
+        } else if (fightOrder > 50) { // boss goes first
             attackButton.setEnabled(false);
             fightOrderLabel.setText("Boss's Turn!");
             fightRakko1Label.setVisible(true);
             fightRakko2Label.setVisible(false);
-            int playerHealth = playerStats.getHealth();
-            playerStats.setHealth(playerHealth - boss2Atk);
-            updateDisplay();
-            //checkPlayerHealth();
-            fightOrder = 1;
-            fightOrderDecision();
+
+            bossTimer.restart();
+
         }
     }
 
-    public void checkPlayerHealth() {
-        if (playerStats.getHealth() <= 0) {
-                returnHome();
-            }
-    }
     public void updateDisplay() {
         playerAtkLabel.setText("Your Attack: " + playerStats.getAtk());
         playerHealthLabel.setText("Your Health: " + playerStats.getHealth());
@@ -179,6 +284,7 @@ public class Boss2Panel extends JPanel {
     }
 
     public void returnHome() {
+        bossTimer.stop();
         hpFrame.setHomePageVisibility(true);
         boss2Frame.setBoss2Visibility(false);
         hpFrame.updateFrame();
@@ -197,8 +303,8 @@ public class Boss2Panel extends JPanel {
             fightOrderDecision();
             if (boss2Health <= 0) {
                 boss2Status = true;
+                boss2Lost = false;
                 returnHome();
-                
             }
         }
 
@@ -209,6 +315,20 @@ public class Boss2Panel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             returnHome();
+        }
+
+    }
+
+    public class TimerListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int playerHealth = playerStats.getHealth();
+            playerStats.setHealth(playerHealth - boss2Atk);
+            updateDisplay();
+            checkPlayerHealth();
+            fightOrder = 1;
+            fightOrderDecision();
         }
 
     }

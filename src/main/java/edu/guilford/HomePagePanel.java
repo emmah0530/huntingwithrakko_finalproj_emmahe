@@ -334,7 +334,7 @@ public class HomePagePanel extends JPanel {
 
 
         gamblePanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        gambleText = new JTextArea("Press the button to gamble!");
+        gambleText = new JTextArea("Press the button to gamble for a chance to win up to 200 cakes!");
         gambleText.setFont(this.chiruFont);
         gambleText.setLineWrap(true);
         gambleText.setWrapStyleWord(true);
@@ -454,6 +454,33 @@ public class HomePagePanel extends JPanel {
             updateDisplay();
             JOptionPane.showMessageDialog(null, "You lost against the first boss. Increase your stats and try again!",
                     "Boss 1 Failed :(",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
+        if (boss2Panel.isBoss2Status()) {
+            boss3.setEnabled(true);
+            playerStats.setCake(cake += 100);
+            updateDisplay();
+            JOptionPane.showMessageDialog(null, "You beat the second boss and earned 100 more cakes!",
+                    "Boss 2 Complete!",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
+        if (boss2Panel.isBoss2Lost()) {
+            updateDisplay();
+            JOptionPane.showMessageDialog(null, "You lost against the second boss. Increase your stats and try again!",
+                    "Boss 2 Failed :(",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
+        if (boss3Panel.isBoss3Status()) {
+            playerStats.setCake(cake += 150);
+            updateDisplay();
+            JOptionPane.showMessageDialog(null, "You beat the third boss and earned 150 more cakes!",
+                    "Boss 3 Complete!",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
+        if (boss3Panel.isBoss3Lost()) {
+            updateDisplay();
+            JOptionPane.showMessageDialog(null, "You lost against the third boss. Increase your stats and try again!",
+                    "Boss 3 Failed :(",
                     JOptionPane.PLAIN_MESSAGE);
         }
     }
@@ -685,8 +712,8 @@ public class HomePagePanel extends JPanel {
                 hpFrame.updateFrame();
                 boss1Frame.updateFrame();
             } else if (fightBoss2) {
-                // boss2Panel.checkPlayerHealth();
-                // boss2Panel.refreshDisplay();
+                boss2Panel.checkPlayerHealth();
+                boss2Panel.refreshDisplay();
                 hpFrame.setHomePageVisibility(false);
                 boss2Frame.setBoss2Visibility(true);
                 hpFrame.updateFrame();

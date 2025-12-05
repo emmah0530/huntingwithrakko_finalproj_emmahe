@@ -22,6 +22,12 @@ public class HuntingWithRakko {
         boss2Window.add(boss2Page);
         boss2Window.pack();
 
+        Boss3Frame boss3Window = new Boss3Frame("Fight the Boss!");
+        boss3Window.setDefaultCloseOperation(Boss3Frame.EXIT_ON_CLOSE);
+        Boss3Panel boss3Page = new Boss3Panel();
+        boss3Window.add(boss3Page);
+        boss3Window.pack();
+
 
         PlayerStats playerStats = new PlayerStats();
 
@@ -36,11 +42,21 @@ public class HuntingWithRakko {
         boss1Page.setHpFrame(homePageWindow);
         boss1Page.setBoss1Frame(boss1Window);
         boss1Page.setPlayerStats(playerStats);
-        
+        boss1Page.setBoss2Panel(boss2Page);
+        boss1Page.setBoss3Panel(boss3Page);
 
         boss2Page.setHpPanel(homePage);
         boss2Page.setHpFrame(homePageWindow);
         boss2Page.setBoss2Frame(boss2Window);
         boss2Page.setPlayerStats(playerStats);
+        boss2Page.setBoss1Panel(boss1Page);
+        boss2Page.setBoss3Panel(boss3Page);
+
+        boss3Page.setHpPanel(homePage);
+        boss3Page.setHpFrame(homePageWindow);
+        boss3Page.setBoss3Frame(boss3Window);
+        boss3Page.setPlayerStats(playerStats);
+        boss3Page.setBoss1Panel(boss1Page);
+        boss3Page.setBoss2Panel(boss2Page);
     }
 }
